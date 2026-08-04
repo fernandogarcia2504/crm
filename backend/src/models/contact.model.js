@@ -1,0 +1,24 @@
+import mongoose from "mongoose";
+
+const ContactSchema = new Schema ({
+
+    company:{
+        type:ObjectId,
+        ref:"Company"
+    },
+    fullName: String,
+    position: String,
+    email: String,
+    phone: String,
+    linkedin: String,
+
+    isPrimary:{
+        type:Boolean,
+        default:false
+    },
+    notes:String
+}, {
+    timestamps: true
+})
+
+export default mongoose.model("Contact", ContactSchema);
