@@ -7,6 +7,7 @@ import AuthLayout from "../layouts/AuthLayout";
 import LoginPage from "../../features/auth/LoginPage";
 import EntrepeneurshipPage from "../../features/entrepeneurship/EntrepeneurshipPage";
 import CompanyPage from "../../features/companies/pages/CompanyPage";
+import ProjectPage from "../../features/projects/pages/ProjectPage";
 
 export default function AppRouter() {
     return (
@@ -18,7 +19,10 @@ export default function AppRouter() {
             <Route element={<ProtectedRoute />}>
                 <Route element={<MainLayout />}>
                     <Route path="/entrepeneurship" element={<EntrepeneurshipPage />} />
-                    <Route path="/entrepeneurship/company" element={<CompanyPage />} />
+                    <Route path="/entrepeneurship/companies" element={<CompanyPage />} />
+
+                    <Route path="/entrepeneurship/company/project" element={<ProjectPage />} />
+                    
                 </Route>
             </Route>
         </Routes>
