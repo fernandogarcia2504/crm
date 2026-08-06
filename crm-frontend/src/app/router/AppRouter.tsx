@@ -5,9 +5,14 @@ import MainLayout from "../layouts/MainLayout";
 import AuthLayout from "../layouts/AuthLayout";
 
 import LoginPage from "../../features/auth/LoginPage";
+
 import EntrepeneurshipPage from "../../features/entrepeneurship/EntrepeneurshipPage";
 import CompanyPage from "../../features/companies/pages/CompanyPage";
-import ProjectPage from "../../features/projects/pages/ProjectPage";
+import DocumentsPage from "../../features/documents/pages/DocumentsPage";
+import ProjectsPage from "../../features/projects/pages/ProjectsPage";
+import ProjectPage from "../../features/projects/pages/ProjectPage"
+import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
+import CompanyActivitiesPage from "../../features/activities/pages/CompanyActivitiesPage";
 
 export default function AppRouter() {
     return (
@@ -21,7 +26,11 @@ export default function AppRouter() {
                     <Route path="/entrepeneurship" element={<EntrepeneurshipPage />} />
                     <Route path="/entrepeneurship/companies" element={<CompanyPage />} />
 
-                    <Route path="/entrepeneurship/company/project" element={<ProjectPage />} />
+                    <Route path="/entrepeneurship/company/projects" element={<ProjectsPage />} />
+                    <Route path="/entrepeneurship/company/projects/project" element={<ProjectPage />} />
+                    <Route path="/entrepeneurship/company/documents" element={<DocumentsPage />} />
+                    <Route path="/entrepeneurship/company/contacts" element={<CompanyContactsPage />} />
+                    <Route path="/entrepeneurship/company/activities" element={<CompanyActivitiesPage />} />
                     
                 </Route>
             </Route>

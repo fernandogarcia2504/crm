@@ -1,0 +1,24 @@
+import CreateButton from "../../../components/ui/buttons/CreateButton"
+import DocumentCard from "../components/DocumentCard"
+
+export default function DocumentsPage() {
+
+    return(
+        <div className="w-full flex flex-col">
+            <div className="w-full flex justify-end mt-12">
+                <CreateButton title="Agregar Documento" />
+            </div>
+
+            <div className="w-full grid grid-cols-[20%_10%_20%_40%_10%] pt-12">
+                <p className="text-[#959595] ">Nombre del archivo</p>
+                <p className="text-[#959595] ">Tamaño</p>
+                <p className="text-[#959595] ">Categoría</p>
+                <p className="text-[#959595] ">Notas</p>
+                <p className="text-[#959595] ">Eliminar</p>
+            </div>
+
+            <DocumentCard name="Reporte Tecnico WebGoat.docx" size="15 MB" category="Reporte Tecnico" notes="V1.3 del documento final, falta documentacion de pruebas con nessus" />
+            <DocumentCard name="Factura evaluacion primer semestre.pdf" size="15 MB" category="Factura" notes="Factura" />
+        </div>
+    )
+}
