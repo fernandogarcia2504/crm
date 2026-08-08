@@ -1,8 +1,13 @@
+import { useNavigate } from "react-router-dom"
+
 import {motion} from "framer-motion"
 
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 
 export default function CompanyPage() {
+
+    const navigate = useNavigate();
+
     return(
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
             <div className="w-full flex justify-end mt-12">
