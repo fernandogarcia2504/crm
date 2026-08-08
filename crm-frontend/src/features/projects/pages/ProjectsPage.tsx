@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import {motion} from "framer-motion";
+
 import ContactCard from "../../contacts/components/ContactCard";
 import ProjectCard from "../components/ProjectCard";
 import CreateButton from "../../../components/ui/buttons/CreateButton";
@@ -10,7 +12,7 @@ export default function ProjectsPage() {
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
    return(
-        <div className="w-full flex flex-col">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
             <div className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Proyecto" onClick={() => setIsOpenPopup(true)} />
             </div>
@@ -36,6 +38,6 @@ export default function ProjectsPage() {
                     <ProjectPopup onClose={() => setIsOpenPopup(false)} />
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }

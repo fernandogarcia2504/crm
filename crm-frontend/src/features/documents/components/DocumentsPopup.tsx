@@ -45,7 +45,7 @@ export default function DocumentsPopup({onClose}: DocumentsPopupProps) {
             </div>
 
             <div className="flex justify-center">
-                <button className="w-1/3 bg-[#2F76D2] rounded-md px-2 py-1">Subir archivo</button>
+                <button className="w-1/3 bg-[#2F76D2] hover:bg-[#3D83E0] hover:shadow-lg hover:border-[#3A3A3A] rounded-md px-2 py-1 transition duration-300">Subir archivo</button>
             </div>
         </form>
     )

@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import {motion} from "framer-motion"
+
 import ActivityPopup from "../components/ActivityPopup";
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import ActivityCard from "../components/ActivityCard"
@@ -9,8 +11,8 @@ export default function CompanyActivitiesPage() {
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
-        <div className="w-full flex flex-col pb-12">
-            <div className="w-full flex justify-end mt-12">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col pb-12">
+            <div  className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Actividad" onClick={() => setIsOpenPopup(true)} />
             </div>
 
@@ -53,6 +55,6 @@ export default function CompanyActivitiesPage() {
                 </div>
             )}
 
-        </div>
+        </motion.div>
     )
 }

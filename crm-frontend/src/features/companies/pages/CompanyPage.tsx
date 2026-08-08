@@ -1,9 +1,10 @@
+import {motion} from "framer-motion"
 
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 
 export default function CompanyPage() {
     return(
-        <div className="w-full flex flex-col">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
             <div className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Empresa" />
             </div>
@@ -37,6 +38,6 @@ export default function CompanyPage() {
                 <p>Si</p>
                 <p className="text-right">25 jul 2026</p>
             </div>
-        </div>
+        </motion.div>
     )
 }

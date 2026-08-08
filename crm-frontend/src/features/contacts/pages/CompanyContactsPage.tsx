@@ -1,5 +1,7 @@
 import { useState } from "react"
 
+import {motion} from "framer-motion"
+
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import ContactPopup from "../components/ContactPopup"
 import ContactCard from "../components/ContactCard"
@@ -9,7 +11,7 @@ export default function CompanyContactsPage() {
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
-        <div className="w-full flex flex-col">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
             <div className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Contacto" onClick={() => setIsOpenPopup(true)} />
             </div>
@@ -37,6 +39,6 @@ export default function CompanyContactsPage() {
                         <ContactPopup onClose={() => setIsOpenPopup(false)} />
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }

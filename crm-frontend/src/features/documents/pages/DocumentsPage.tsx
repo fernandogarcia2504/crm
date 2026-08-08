@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import {motion} from "framer-motion"
+
 import DocumentsPopup from "../components/DocumentsPopup";
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import DocumentCard from "../components/DocumentCard"
@@ -9,7 +11,7 @@ export default function DocumentsPage() {
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
-        <div className="w-full flex flex-col">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
             <div className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Documento" onClick={() => setIsOpenPopup(true)}/>
             </div>
@@ -33,6 +35,6 @@ export default function DocumentsPage() {
                     <DocumentsPopup onClose={() => setIsOpenPopup(false)} />
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }
