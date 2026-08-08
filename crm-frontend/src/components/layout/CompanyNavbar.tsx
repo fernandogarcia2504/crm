@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom"
+
 import { Menu } from "lucide-react"
 
 export default function CompanyNavbar() {
@@ -14,11 +16,12 @@ export default function CompanyNavbar() {
                 </div>
 
                 <div className="flex gap-12">
-                    <p className="text-[#2F76D2]">Empresas</p>
-                    <p>Finanzas</p>
-                    <p>Templates</p>
-                    <p>Contactos</p>
-                    <p>Actividades</p>
+                    <NavLink to={"/entrepeneurship/companies"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Empresas</NavLink>
+                    <NavLink to={"/entrepeneurship/finances"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Finanzas</NavLink>
+                    <NavLink to={"/entrepeneurship/templates"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Templates</NavLink>
+                    <NavLink to={"/entrepeneurship/contacts"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Contactos</NavLink>
+                    <NavLink to={"/entrepeneurship/activities"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Actividades</NavLink>
+
                 </div>
 
                 <div className="flex-1" />

@@ -1,12 +1,17 @@
+import { useState } from "react";
+
+import ActivityPopup from "../components/ActivityPopup";
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import ActivityCard from "../components/ActivityCard"
 
 export default function CompanyActivitiesPage() {
 
+    const [isOpenPopup, setIsOpenPopup] = useState(false);
+
     return(
         <div className="w-full flex flex-col pb-12">
             <div className="w-full flex justify-end mt-12">
-                <CreateButton title="Agregar Actividad" />
+                <CreateButton title="Agregar Actividad" onClick={() => setIsOpenPopup(true)} />
             </div>
 
             <div className="w-full flex flex-col rounded-lg shadow-lg bg-[#171717] px-4 py-5 gap-4 mt-8">
@@ -38,6 +43,15 @@ export default function CompanyActivitiesPage() {
 
 
             </div>
+
+            {isOpenPopup && (
+                <div
+                    className="fixed inset-0  flex items-center justify-center z-50"
+                    onClick={() => setIsOpenPopup(false)}
+                >
+                    <ActivityPopup onClose={() => setIsOpenPopup(false)} />
+                </div>
+            )}
 
         </div>
     )

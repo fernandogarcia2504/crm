@@ -1,3 +1,4 @@
+
 import EntrepeneurshipCard from "./components/EntrepeneurshipCard"
 
 export default function EntrepeneurshipPage() {

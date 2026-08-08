@@ -10,7 +10,7 @@ export default function MainLayout() {
     const location = useLocation()
 
     const isIndividualCompanyRoute = location.pathname.includes("company")
-    const hideNavbar = location.pathname.endsWith("/projects/project")
+    const hideNavbar = location.pathname.endsWith("/projects/project") || location.pathname.endsWith("/entrepeneurship")
 
     return(
         <div className="bg-[#141414] w-full min-h-screen text-[#ECECEC] flex flex-col items-center">
