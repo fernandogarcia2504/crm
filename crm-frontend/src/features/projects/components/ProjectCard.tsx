@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
+import {motion} from "framer-motion"
+
 import { List } from "lucide-react";
 import { Calendar } from "lucide-react";
 
@@ -15,7 +17,13 @@ export default function ProjectCard({title, tasks, percentage, date}: SetProject
     const navigate = useNavigate();
 
     return(
-        <button onClick={() => navigate("/entrepeneurship/company/projects/project")} className="bg-[#1A1A1A] rounded-md shadow-lg px-4 py-4">
+        <motion.button 
+            onClick={() => navigate("/entrepeneurship/company/projects/project")} 
+            className="bg-[#1A1A1A] rounded-md shadow-lg px-4 py-4"
+            whileHover={{ y: -6, scale: 1.02}}
+            whileTap={{ scale: 0.98}}
+            transition={{ type: "spring", stiffness: 300, damping: 20}}>
+                
             <p className="text-start">{title}</p>
             <div className="border-b border-b-[#777777]"></div>
             <div className="flex justify-between pt-2">
@@ -34,6 +42,6 @@ export default function ProjectCard({title, tasks, percentage, date}: SetProject
                 <p className="text-sm text-[#959595]">Fecha límite</p>
             </div>
             <p className="text-sm mt-2">{date}</p>
-        </button>
+        </motion.button>
     )
 }

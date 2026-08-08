@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 
 interface SetContactsProp {
     fullName: string;
@@ -10,12 +11,16 @@ interface SetContactsProp {
 export default function ContactCard({fullName, position, email, phone, main}: SetContactsProp) {
 
     return(
-        <div className="w-full grid grid-cols-[20%_20%_20%_30%_10%] pt-8">
-            <p className="">{fullName}</p>
-            <p className="">{position}</p>
-            <p className="">{phone}</p>
-            <p className="">{email}</p>
-            <p className="">{main}</p>
-        </div>
+        <motion.div
+            whileHover={{ backgroundColor: "#242424" }}
+            transition={{ duration: 0.2 }}
+            className="w-full grid grid-cols-[20%_20%_20%_30%_10%] mt-8 px-3 py-2 rounded-md"
+        >
+            <motion.p whileHover={{ x: 2 }} className="">{fullName}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="">{position}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="">{phone}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="">{email}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="">{main}</motion.p>
+        </motion.div>
     )
 }
