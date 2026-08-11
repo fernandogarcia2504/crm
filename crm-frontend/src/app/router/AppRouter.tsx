@@ -9,10 +9,9 @@ import LoginPage from "../../features/auth/LoginPage";
 import EntrepeneurshipPage from "../../features/entrepeneurship/EntrepeneurshipPage";
 
 import CompanyPage from "../../features/companies/pages/CompanyPage";
-import Finances from "../../features/finances/pages/Finances";
-import Templates from "../../features/templates/pages/Templates";
-import Contacts from "../../features/contacts/pages/Contacts";
-import Activities from "../../features/activities/pages/Activities";
+import Finances from "../../features/finances/pages/FinancesPage";
+import ContactsPage from "../../features/contacts/pages/ContactsPage";
+import TemplatesPage from "../../features/templates/pages/TemplatesPage";
 
 import DocumentsPage from "../../features/documents/pages/DocumentsPage";
 import ProjectsPage from "../../features/projects/pages/ProjectsPage";
@@ -33,9 +32,8 @@ export default function AppRouter() {
 
                     <Route path="/entrepeneurship/companies" element={<CompanyPage />} />
                     <Route path="/entrepeneurship/finances" element={<Finances />} />
-                    <Route path="/entrepeneurship/templates" element={<Templates />} />
-                    <Route path="/entrepeneurship/contacts" element={<Contacts />} />
-                    <Route path="/entrepeneurship/activities" element={<Activities />} />
+                    <Route path="/entrepeneurship/templates" element={<TemplatesPage />} />
+                    <Route path="/entrepeneurship/contacts" element={<ContactsPage />} />
 
                     <Route path="/entrepeneurship/company/projects" element={<ProjectsPage />} />
                     <Route path="/entrepeneurship/company/projects/project" element={<ProjectPage />} />

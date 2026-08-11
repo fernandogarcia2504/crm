@@ -4,9 +4,9 @@ import {motion} from "framer-motion"
 
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import ContactPopup from "../components/ContactPopup"
-import CompanyContactCard from "../components/CompanyContactCard"
+import ContactCard from "../components/ContactCard"
 
-export default function CompanyContactsPage() {
+export default function ContactsPage() {
 
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
@@ -16,20 +16,21 @@ export default function CompanyContactsPage() {
                 <CreateButton title="Agregar Contacto" onClick={() => setIsOpenPopup(true)} />
             </div>
 
-            <div className="w-full grid grid-cols-[20%_20%_20%_30%_10%] pt-8">
+            <div className="w-full grid grid-cols-[20%_20%_15%_15%_20%_10%] pt-8">
                 <p className="text-[#959595]">Nombre</p>
                 <p className="text-[#959595]">Puesto</p>
                 <p className="text-[#959595]">Teléfono</p>
+                <p className="text-[#959595]">Empresa</p>
                 <p className="text-[#959595]">Correo electrónico</p>
                 <p className="text-[#959595]">Principal</p>
             </div>
 
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
+            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Banco Azteca" email="nando.garcia2504@gmail.com" main="Si" />
+            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="HSBC" email="nando.garcia2504@gmail.com" main="Si" />
+            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="STAR Medica" email="nando.garcia2504@gmail.com" main="Si" />
+            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Jazwares" email="nando.garcia2504@gmail.com" main="Si" />
+            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Bimbo" email="nando.garcia2504@gmail.com" main="Si" />
+            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Mercado Pago" email="nando.garcia2504@gmail.com" main="Si" />
 
             {isOpenPopup && (
                 <div

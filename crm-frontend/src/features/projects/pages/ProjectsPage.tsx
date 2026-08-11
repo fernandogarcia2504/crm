@@ -2,7 +2,6 @@ import { useState } from "react";
 
 import {motion} from "framer-motion";
 
-import ContactCard from "../../contacts/components/ContactCard";
 import ProjectCard from "../components/ProjectCard";
 import CreateButton from "../../../components/ui/buttons/CreateButton";
 import ProjectPopup from "../components/ProjectPopup";

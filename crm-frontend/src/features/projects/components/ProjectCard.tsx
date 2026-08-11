@@ -41,7 +41,7 @@ export default function ProjectCard({title, tasks, percentage, date}: SetProject
                 <Calendar size={15} />
                 <p className="text-sm text-[#959595]">Fecha límite</p>
             </div>
-            <p className="text-sm mt-2">{date}</p>
+            <p className="text-sm mt-2 text-start">{date}</p>
         </motion.button>
     )
 }
