@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const companySchema = new Schema ({
+const companySchema = new mongoose.Schema ({
     business:{
         type:ObjectId,
         ref:"Business",
@@ -23,7 +23,7 @@ const companySchema = new Schema ({
     },
 
     notes: String,
-    adress: {
+    address: {
         country: String,
         state: String,
         city: String,

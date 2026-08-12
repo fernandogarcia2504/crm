@@ -13,7 +13,7 @@ export default function MainLayout() {
     const hideNavbar = location.pathname.endsWith("/projects/project") || location.pathname.endsWith("/entrepeneurship")
 
     return(
-        <div className="bg-[#141414] w-full min-h-screen text-[#ECECEC] flex flex-col items-center">
+        <div className="bg-[#141414] w-full min-h-screen text-[#ECECEC] flex flex-col items-center ">
 
             {!hideNavbar && (
                 isIndividualCompanyRoute ? <ProjectNavbar /> : <CompanyNavbar />

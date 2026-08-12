@@ -1,12 +1,23 @@
 @import "tailwindcss";
 
 @layer utilities {
-  .hide-scrollbar {
-    -ms-overflow-style: none; /* IE y Edge */
-    scrollbar-width: none; /* Firefox */
-  }
+    .hide-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
 
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari y Opera */
-  }
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+html,
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
 }

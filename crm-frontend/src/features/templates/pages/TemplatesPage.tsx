@@ -10,7 +10,7 @@ export default function TemplatesPage() {
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col pb-16 ">
             <div className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Template" onClick={() => setIsOpenPopup(true)} />
             </div>

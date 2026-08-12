@@ -19,7 +19,7 @@ export default function ProjectCard({title, tasks, percentage, date}: SetProject
     return(
         <motion.button 
             onClick={() => navigate("/entrepeneurship/company/projects/project")} 
-            className="bg-[#1A1A1A] rounded-md shadow-lg px-4 py-4"
+            className="bg-[#1A1A1A] rounded-md shadow-lg px-4 py-4 cursor-pointer"
             whileHover={{ y: -6, scale: 1.02}}
             whileTap={{ scale: 0.98}}
             transition={{ type: "spring", stiffness: 300, damping: 20}}>

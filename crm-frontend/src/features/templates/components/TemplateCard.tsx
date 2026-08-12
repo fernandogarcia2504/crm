@@ -14,7 +14,7 @@ export default function TemplatesCard({name, notes, status}: SetTemplatesProps) 
 
     return(
         <motion.div 
-            className="bg-[#1A1A1A] w-full rounded-md shadow-lg px-4 py-4 flex flex-col gap-4"
+            className="bg-[#1A1A1A] w-full rounded-md shadow-lg px-4 py-4 flex flex-col gap-4 cursor-pointer"
             whileHover={{ y: -6, scale: 1.02}}
             whileTap={{ scale: 0.98}}
             transition={{ type: "spring", stiffness: 300, damping: 20}}>

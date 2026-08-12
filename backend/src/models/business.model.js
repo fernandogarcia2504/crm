@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
 
-const BusinessSchema = new Schema({
+const BusinessSchema = new mongoose.Schema({
 
     name:String,
 
     description:String,
-
-    logo:String,
 
     active:{
         type:Boolean,

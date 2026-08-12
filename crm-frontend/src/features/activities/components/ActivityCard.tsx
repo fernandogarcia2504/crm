@@ -38,7 +38,7 @@ export default function({ subject, result, nextStep, date, type, isLast=false}: 
     const {icon: Icon, color} = activityConfig[type];
 
     return(
-        <div className="w-full grid grid-cols-[3%_60%_25%_10%] px-3 items-center gap-2">
+        <div className="w-full grid grid-cols-[3%_60%_25%_10%] px-3 items-center gap-2 cursor-pointer">
 
             <div className="flex flex-col items-center relative">
                 <div

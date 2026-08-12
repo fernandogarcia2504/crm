@@ -4,7 +4,7 @@ interface ContactPopupsProps {
     onClose: () => void;
 }
 
-export default function ContactPopup({onClose}: ContactPopupsProps) {
+export default function CompanyContactPopup({onClose}: ContactPopupsProps) {
 
     return(
         <form action="" onClick={(e) => e.stopPropagation()} className="w-[27%] bg-[#1A1A1A] flex flex-col p-4 gap-6">
@@ -16,10 +16,6 @@ export default function ContactPopup({onClose}: ContactPopupsProps) {
                 <p>Agregar nuevo contacto</p>
             </div>
 
-            <div className="w-full flex flex-col gap-3">
-                <p className="text-sm">Selecciona una empresa</p>
-                <input type="text" className="w-full rounded-md px-3 py-1 bg-[#212121] placeholder:text-sm"  />
-            </div>
             <div className="w-full flex flex-col gap-3">
                 <p className="text-sm">Nombre completo del contacto</p>
                 <input type="text" className="w-full rounded-md px-3 py-1 bg-[#212121] placeholder:text-sm" placeholder="Ingresa el nombre del contacto..." />
@@ -52,7 +48,7 @@ export default function ContactPopup({onClose}: ContactPopupsProps) {
             </div>
 
             <div className="flex justify-center">
-                <button className="w-[40%] bg-[#2F76D2] rounded-md px-2 py-1">Crear contacto</button>
+                <button className="w-1/3 bg-[#2F76D2] rounded-md px-2 py-1">Crear contacto</button>
             </div>
         </form>
     )

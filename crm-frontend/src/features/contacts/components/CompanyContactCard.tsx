@@ -20,7 +20,7 @@ export default function CompanyContactCard({fullName, position, email, phone, ma
             <motion.p whileHover={{ x: 2 }} className="">{position}</motion.p>
             <motion.p whileHover={{ x: 2 }} className="">{phone}</motion.p>
             <motion.p whileHover={{ x: 2 }} className="">{email}</motion.p>
-            <motion.p whileHover={{ x: 2 }} className="">{main}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="text-right">{main}</motion.p>
         </motion.div>
     )
 }

@@ -3,7 +3,7 @@ import { useState } from "react"
 import {motion} from "framer-motion"
 
 import CreateButton from "../../../components/ui/buttons/CreateButton"
-import ContactPopup from "../components/ContactPopup"
+import ContactPopup from "../components/CompanyContactPopup"
 import CompanyContactCard from "../components/CompanyContactCard"
 
 export default function CompanyContactsPage() {
@@ -21,7 +21,7 @@ export default function CompanyContactsPage() {
                 <p className="text-[#959595]">Puesto</p>
                 <p className="text-[#959595]">Teléfono</p>
                 <p className="text-[#959595]">Correo electrónico</p>
-                <p className="text-[#959595]">Principal</p>
+                <p className="text-[#959595] text-right">Principal</p>
             </div>
 
             <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
