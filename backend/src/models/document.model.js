@@ -3,17 +3,17 @@ import mongoose from "mongoose";
 const DocumentSchema = new Schema = ({
 
     business:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Business"
     },
 
     company:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Company"
     },
 
     project:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Project"
     },
 

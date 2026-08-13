@@ -1,8 +1,12 @@
 import express from "express";
 
 import authRoutes from "./routes/auth.routes.js";
-import businessRoutes from "./routes/business.routes.js"
-import companyRoutes from "./routes/company.routes.js"
+import businessRoutes from "./routes/business.routes.js";
+import companyRoutes from "./routes/company.routes.js";
+import contactRoutes from "./routes/contact.routes.js";
+import opportunityRoutes from "./routes/opportunity.routes.js";
+import activityRoutes from "./routes/activity.routes.js";
+import serviceTemplateRoutes from "./routes/serviceTemplate.routes.js"
 
 const app = express();
 
@@ -11,5 +15,9 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/businessess", businessRoutes);
 app.use("/api/companies", companyRoutes);
+app.use("/api/contacts", contactRoutes);
+app.use("/api/opportunities", opportunityRoutes);
+app.use("/api/activities", activityRoutes);
+app.use("/api/service-templates", serviceTemplateRoutes);
 
 export default app;

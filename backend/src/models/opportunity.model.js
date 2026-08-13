@@ -1,25 +1,25 @@
 import mongoose from "mongoose";
 
-const OpportunitySchema = new Schema ({
+const OpportunitySchema = new mongoose.Schema ({
     business: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Business",
         required: true
     },
 
     company: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         required: true
     },
 
-    primaryContact: {
-        type: ObjectId,
+    contact: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Contact"
     },
 
     serviceTemplate: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "ServiceTemplate",
         required: true
     },
@@ -62,6 +62,10 @@ const OpportunitySchema = new Schema ({
     nextAction: String,
 
     notes: String,
+
+    nextActionDate: Date,
+
+    lastActivityAt: Date,
 
     project: {
         type: ObjectId,

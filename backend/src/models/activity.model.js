@@ -3,37 +3,26 @@ import mongoose from "mongoose";
 const ActivitySchema = new Schema ({
 
     business: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Business",
         required: true
     },
 
     company: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Company",
         required: true
     },
 
     contact: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Contact"
     },
 
     opportunity: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Opportunity",
         default: null
-    },
-
-    category: {
-        type: String,
-        enum: [
-            "Prospeccion",
-            "Negociacion",
-            "Seguimiento",
-            "Postventa"
-        ],
-        required: true
     },
 
     type: {
@@ -50,9 +39,9 @@ const ActivitySchema = new Schema ({
         ]
     },
 
-    subject: String,
+    title: String,
 
-    notes: String, //1 a n
+    description: String, //1 a n
 
     result: String, // agendado, completado, programado, fin, etc.
 
@@ -60,7 +49,10 @@ const ActivitySchema = new Schema ({
 
     scheduledDate: Date,
 
-    completedDate: Date,
+    date: {
+        type: Date,
+        defualt: Date.now
+    }
 
 }, {
     timestamps: true

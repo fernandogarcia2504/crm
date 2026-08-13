@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const ContactSchema = new Schema ({
 
     company:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Company"
     },
     fullName: String,

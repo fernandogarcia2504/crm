@@ -3,22 +3,22 @@ import mongoose from "mongoose";
 const ProjectSchema = new Schema ({
 
     business:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Business"
     },
 
     company:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Company"
     },
 
     opportunity:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Opportunity"
     },
 
     serviceTemplate:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"ServiceTemplate"
     },
 
@@ -29,8 +29,7 @@ const ProjectSchema = new Schema ({
         enum:[
             "Planeacion",
             "Ejecucion",
-            "Reporte",
-            "Entrega",
+            "Cierre",
             "Cerrado"
         ]
     },

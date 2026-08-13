@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-const ServiceTemplateSchema = new Schema ({
+const ServiceTemplateSchema = new mongoose.Schema ({
 
     business:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Business"
     },
 

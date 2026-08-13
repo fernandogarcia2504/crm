@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const companySchema = new mongoose.Schema ({
     business:{
-        type:ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref:"Business",
         required:true
     },
