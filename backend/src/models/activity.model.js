@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ActivitySchema = new Schema ({
+const ActivitySchema = new mongoose.Schema ({
 
     business: {
         type: mongoose.Schema.Types.ObjectId,

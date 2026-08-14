@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ProjectSchema = new Schema ({
+const ProjectSchema = new mongoose.Schema ({
 
     business:{
         type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +31,8 @@ const ProjectSchema = new Schema ({
             "Ejecucion",
             "Cierre",
             "Cerrado"
-        ]
+        ],
+        default:"Planeacion"
     },
 
     manager: String, 

@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
-const ContactSchema = new Schema ({
+const ContactSchema = new mongoose.Schema ({
 
     company:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"Company"
     },
+    
     fullName: String,
     position: String,
     email: String,

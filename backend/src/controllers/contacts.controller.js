@@ -1,5 +1,5 @@
-import Contact from "../models/contact.model"
-import Company from "../models/company.model"
+import Contact from "../models/contact.model.js"
+import Company from "../models/company.model.js"
 
 export const createContact = async(req, res) => {
     try {
@@ -243,3 +243,22 @@ export const deleteContact = async (req, res) => {
     }
 };
  
+export const getAllContacts = async (req, res) => {
+    try {
+
+        const contacts = await Contact.find()
+            .populate("company", "name");
+
+        return res.status(200).json({
+            contacts
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            message: "Error al obtener los contactos"
+        });
+    }
+};

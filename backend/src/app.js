@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/businessess", businessRoutes);
+app.use("/api/business", businessRoutes);
 app.use("/api/companies", companyRoutes);
 app.use("/api/contacts", contactRoutes);
 app.use("/api/opportunities", opportunityRoutes);
@@ -21,3 +21,5 @@ app.use("/api/activities", activityRoutes);
 app.use("/api/service-templates", serviceTemplateRoutes);
 
 export default app;
+
+// businessId: 6a7e75318fd7397a2e006725

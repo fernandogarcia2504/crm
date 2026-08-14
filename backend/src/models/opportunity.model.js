@@ -68,7 +68,7 @@ const OpportunitySchema = new mongoose.Schema ({
     lastActivityAt: Date,
 
     project: {
-        type: ObjectId,
+        type: mongoose.Schema.Types.ObjectId,        
         ref: "Project",
         default: null
     }

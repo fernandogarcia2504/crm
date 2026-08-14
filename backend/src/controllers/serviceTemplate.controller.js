@@ -1,5 +1,5 @@
-import ServiceTemplate from "../models/servicetemplate.model"
-import Business from "../models/business.model"
+import ServiceTemplate from "../models/servicetemplate.model.js"
+import Business from "../models/business.model.js"
 
 export const createServiceTemplate = async (req,res) => {
     try {
@@ -14,7 +14,7 @@ export const createServiceTemplate = async (req,res) => {
             return res.status(404).json({ message: "Business no encontrado"})
         }
 
-        const existingServiceTemplate = await findOne({ name })
+        const existingServiceTemplate = await ServiceTemplate.findOne({ name })
 
         if(existingServiceTemplate) {
             return res.status(409).json({ message: "El template ya existe"})

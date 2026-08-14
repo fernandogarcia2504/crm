@@ -1,13 +1,13 @@
 import express from "express";
 
-import { createActivity, getActivity, getOpportunityActivities } from "../controllers/activity.controller";
+import { createActivity, getActivity, getOpportunityActivities } from "../controllers/activity.controller.js";
 
 const router = express.Router();
 
-router.post("/business/:businessId", createActivity);
+router.post("/:opportunityId", createActivity);
 
-router.get("/business/:businessId", getOpportunityActivities);
+router.get("/:opportunityId", getOpportunityActivities);
 
-router.get("/business/:businessId/:activityId", getActivity);
+router.get("/:opportunityId/:activityId", getActivity);
 
 export default router;

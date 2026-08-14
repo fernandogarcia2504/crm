@@ -4,13 +4,13 @@ import { createCompany, getCompanies, getCompany, deleteCompany, updateCompany }
 
 const router = express.Router();
 
-router.post("/:businessId/companies", createCompany);
+router.post("/:businessId", createCompany);
 
-router.get("/:businessId/companies", getCompanies);
+router.get("/:businessId", getCompanies);
 
 router.get("/:businessId/companies/:companyId", getCompany);
 
-router.update("/:businessId/companies/:companyId", updateCompany);
+router.put("/:businessId/companies/:companyId", updateCompany);
 
 router.delete("/:businessId/companies/:companyId", deleteCompany);
 

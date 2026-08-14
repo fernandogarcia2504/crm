@@ -1,12 +1,14 @@
 import express from "express"
 
-import { createContact, getContact, getContacts, updateContact, deleteContact } from "../controllers/contacts.controller"
+import { createContact, getContact, getContacts, getAllContacts , updateContact, deleteContact } from "../controllers/contacts.controller.js"
 
 const router = express.Router()
 
-router.post("/:companyId/contacts", createContact);
+router.post("/:companyId", createContact);
 
-router.get("/:companyId/contacts", getContacts);
+router.get("/:companyId", getContacts);
+
+router.get("/", getAllContacts)
 
 router.get("/:companyId/contacts/:contactId", getContact);
 

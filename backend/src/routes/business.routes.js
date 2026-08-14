@@ -2,7 +2,7 @@ import express from "express";
 
 import { createBusiness, getBusiness, getBusinesses, updateBusiness, deleteBusiness } from "../controllers/business.controller.js";
 
-const router = express.router();
+const router = express.Router();
 
 router.post("/", createBusiness);
 

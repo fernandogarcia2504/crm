@@ -1,5 +1,7 @@
 import Activity from "../models/activity.model.js";
 import Opportunity from "../models/opportunity.model.js";
+import ServiceTemplate from "../models/servicetemplate.model.js"
+import Project from "../models/project.model.js"
 
 export const createActivity = async (req, res) => {
 
@@ -110,6 +112,94 @@ export const createActivity = async (req, res) => {
 
         opportunity.lastActivityAt = date || new Date();
 
+        let project = null;
+
+        if(opportunity.stage === "Ganado" && !opportunity.project) {
+            const serviceTemplate = await ServiceTemplate.findById( opportunity.serviceTemplate );
+
+            if(!serviceTemplate) {
+                return res.status(404).json({message: "El servicetemplate asociado a la oportunidad no existe"})
+            }
+
+            project = await Project.create({
+
+                // Datos provenientes de Opportunity
+                business: opportunity.business,
+
+                company: opportunity.company,
+
+                opportunity: opportunity._id,
+
+                serviceTemplate: opportunity.serviceTemplate,
+
+                name: opportunity.title,
+
+                startDate: opportunity.expectedStartDate,
+
+                // Project comienza en Planeacion
+                status: "Planeacion",
+
+                // Datos propios del Project
+                scope: {
+                    domains: [],
+                    subdomains: [],
+                    ips: [],
+                    applications: [],
+                    apis: [],
+                    exclusions: [],
+                    allowedHours: "",
+                    technicalContact: ""
+                },
+
+                assets: [],
+
+                // Copiar fases del ServiceTemplate
+                phases: serviceTemplate.phases.map(phase => ({
+
+                    name: phase.name,
+
+                    order: phase.order,
+
+                    status: "Pendiente",
+
+                    startedAt: null,
+
+                    finishedAt: null,
+
+                    checklist: phase.checklist.map(task => ({
+
+                        task,
+
+                        completed: false,
+
+                        completedAt: null
+
+                    }))
+
+                })),
+
+                // Copiar deliverables del ServiceTemplate
+                deliverables: serviceTemplate.deliverables.map(
+                    deliverable => ({
+
+                        name: deliverable.name,
+
+                        completed: false,
+
+                        version: 1,
+
+                        deliveredAt: null
+
+                    })
+                ),
+
+                // Timeline comienza vacío
+                timeline: []
+            });
+
+            opportunity.project = project._id
+        }
+
 
         await opportunity.save();
 
@@ -120,7 +210,9 @@ export const createActivity = async (req, res) => {
 
             activity,
 
-            opportunity
+            opportunity,
+
+            project
 
         });
 

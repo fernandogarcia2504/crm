@@ -1,13 +1,13 @@
 import express from "express";
 
-import { createServiceTemplate, getServiceTemplate, getServiceTemplates } from "../controllers/serviceTemplate.controller";
+import { createServiceTemplate, getServiceTemplate, getServiceTemplates } from "../controllers/servicetemplate.controller.js";
 
 const router = express.Router();
 
-router.post("/business/:businessId", createServiceTemplate);
+router.post("/:businessId", createServiceTemplate);
 
-router.get("/business/businessId", getServiceTemplates)
+router.get("/:businessId", getServiceTemplates)
 
-router.get("/business/businessId/:serviceTemplateId", getServiceTemplates)
+router.get("/:businessId/templates/:serviceTemplateId", getServiceTemplate)
 
 export default router;

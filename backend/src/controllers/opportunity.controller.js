@@ -3,13 +3,14 @@ import Company from "../models/company.model.js"
 import Contact from "../models/contact.model.js"
 import ServiceTemplate from "../models/servicetemplate.model.js"
 import Opportunity from "../models/opportunity.model.js"
+import Project from "../models/project.model.js"
 
 export const createOpportunity = async(req, res) => {
     try {
 
         const {businessId} = req.params;
 
-        const { title, stage, estimatedAmount, estimatedCloseDate, expectedStartDate, priority, lostReason, nextAction, probability, companyId, contactId, serviceTemplateId} = req.body
+        const { title, stage, estimatedAmount, estimatedCloseDate, expectedStartDate, priority, lostReason, nextAction, probability, companyId, contactId, serviceTemplateId, notes} = req.body
 
         if(!title) {
             return res.status(400).json({message: "El titulo es requerido"})
