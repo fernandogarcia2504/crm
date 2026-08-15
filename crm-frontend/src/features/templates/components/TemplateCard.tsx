@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
 
 import {motion} from "framer-motion"
-
 import { File } from "lucide-react";
 
-interface SetTemplatesProps {
-    name: string;
-    notes: string;
-    status: string;
+import type { ServiceTemplate } from "../types/templates.types";
+
+interface TemplateCardProps {
+    serviceTemplate: ServiceTemplate;
 }
 
-export default function TemplatesCard({name, notes, status}: SetTemplatesProps) {
+export default function TemplatesCard({serviceTemplate}: TemplateCardProps) {
 
     return(
         <motion.div 
@@ -22,11 +21,11 @@ export default function TemplatesCard({name, notes, status}: SetTemplatesProps) 
             <div className="bg-[#959595] rounded-lg flex items-center justify-center h-24">
                 <File size={32} color="red" />
             </div>
-            <p>{name}</p>
-            <p className="text-sm text-[#959595]">{notes}</p>
+            <p>{serviceTemplate.name}</p>
+            <p className="text-sm text-[#959595]">{serviceTemplate.description}</p>
 
-            <div className="w-1/4 rounded-lg bg-[#171717] py-1 flex items-center justify-center">
-                <p className="text-sm">{status}</p>
+            <div className="w-1/2 rounded-lg bg-[#171717] py-1 flex items-center justify-center">
+                <p className="text-sm">Duracion estimada: {serviceTemplate.estimatedDuration}</p>
             </div>
         </motion.div>
     )

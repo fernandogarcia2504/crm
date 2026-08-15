@@ -1,28 +1,25 @@
 import { motion } from "framer-motion";
 
-interface SetContactsProp {
-    fullName: string;
-    position: string;
-    email: string;
-    phone: string;
-    main: string;
-    company: string
+import type { Contact } from "../types/contact.types";
+
+interface ContactCardProps {
+    contact: Contact;
 }
 
-export default function ContactCard({fullName, position, email, phone, main, company}: SetContactsProp) {
+export default function ContactCard({contact}: ContactCardProps) {
 
     return(
         <motion.div
             whileHover={{ backgroundColor: "#242424" }}
             transition={{ duration: 0.2 }}
-            className="w-full grid grid-cols-[20%_20%_15%_15%_20%_10%] mt-8 px-3 py-2 rounded-md"
+            className="w-full grid grid-cols-[20%_20%_15%_15%_20%_10%] mt-8  py-2 rounded-md"
         >
-            <motion.p whileHover={{ x: 2 }} className="">{fullName}</motion.p>
-            <motion.p whileHover={{ x: 2 }} className="">{position}</motion.p>
-            <motion.p whileHover={{ x: 2 }} className="">{phone}</motion.p>
-            <motion.p whileHover={{ x: 2 }} className="">{company}</motion.p>
-            <motion.p whileHover={{ x: 2 }} className="">{email}</motion.p>
-            <motion.p whileHover={{ x: 2 }} className="text-right">{main}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="min-w-0 truncate">{contact.fullName}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="">{contact.position}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="">{contact.phone}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="min-w-0 truncate">{contact.company.name}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="min-w-0 truncate">{contact.email}</motion.p>
+            <motion.p whileHover={{ x: 2 }} className="text-right">{contact.isPrimary}</motion.p>
         </motion.div>
     )
 }

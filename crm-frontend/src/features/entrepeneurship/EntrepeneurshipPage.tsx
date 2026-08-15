@@ -1,7 +1,73 @@
+import { useContext, useEffect, useState } from "react";
+
+import { BusinessContext } from "../../app/context/BusinessContext";
+
 import { motion } from "framer-motion";
 import EntrepeneurshipCard from "./components/EntrepeneurshipCard";
+import { useNavigate } from "react-router-dom";
+
+interface Business {
+    _id: string;
+    name: string;
+    description: string
+}
 
 export default function EntrepeneurshipPage() {
+
+    const navigate = useNavigate();
+
+    const businessContext = useContext(BusinessContext)
+
+    const [businessess, setBusinessess] = useState<Business[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    const handleSelectBusiness = (businessId: string) => {
+        if (!businessContext) {
+            throw new Error("Business context no disponible")
+        }
+
+        businessContext.setBusiness(businessId);
+        navigate(`/entrepeneurship/companies`);
+
+    }
+
+    useEffect(() => {
+        const getBusinessess = async () => {
+            try {
+
+                const response = await fetch(
+                    "http://localhost:3000/api/business",
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                        }
+                    }
+                );
+
+                const data = await response.json();
+
+                if(!response.ok) {
+                    throw new Error(
+                        data.message || "Error al obtener los negocios"
+                    )
+                }
+
+                setBusinessess(data.businesses)
+            } catch( error: unknown ) {
+                if (error instanceof Error) {
+                    setError(error.message);
+                } else {
+                    setError("Error al obtener los negocios");
+                }
+
+            } finally {
+                setLoading(false);
+            }
+        }
+        getBusinessess();
+    }, []);
 
     return(
         <motion.div
@@ -36,28 +102,45 @@ export default function EntrepeneurshipPage() {
                 Selecciona el negocio con el que deseas trabajar
             </motion.p>
 
-            <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.5, delay: 0.35 }}
-                className="flex flex-row gap-12 mt-12 justify-center"
-            >
-                <EntrepeneurshipCard
-                    title="Auditoría"
-                    description="Auditorías regulatorias, riesgos tecnológicos y asesorías de seguridad."
-                />
+            {loading && (
+                <p className="text-[#959595] mt-12">
+                    Cargando negocios...
+                </p>
+            )}
 
-                <EntrepeneurshipCard
-                    title="Evaluación de vulnerabilidades"
-                    description="Evaluación de vulnerabilidades a activos expuestos a internet."
-                />
 
-                <EntrepeneurshipCard
-                    title="Phishing"
-                    description="Simulaciones y cursos de concientización sobre phishing."
-                />
-            </motion.div>
+            {error && (
+                <p className="text-red-400 mt-12">
+                    {error}
+                </p>
+            )}
+
+            {!loading && !error && (
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                        duration: 1.5,
+                        delay: 0.35
+                    }}
+                    className="w-full flex flex-row gap-12 mt-12 justify-center"
+                >
+
+                    {businessess.map((business) => (
+                        <EntrepeneurshipCard
+                            key={business._id}
+                            title={business.name}
+                            description={business.description}
+                            onClick={() =>
+                                handleSelectBusiness(business._id)
+                            }
+                        />
+                    ))}
+
+                </motion.div>
+            )}
 
         </motion.div>
     )
 }
+

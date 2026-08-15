@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 import authRoutes from "./routes/auth.routes.js";
 import businessRoutes from "./routes/business.routes.js";
@@ -9,6 +10,10 @@ import activityRoutes from "./routes/activity.routes.js";
 import serviceTemplateRoutes from "./routes/serviceTemplate.routes.js"
 
 const app = express();
+
+app.use(cors({
+    origin: "http://localhost:5173"
+}));
 
 app.use(express.json());
 

@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Router, BrowserRouter } from "react-router-dom";
 
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
@@ -19,30 +19,39 @@ import ProjectPage from "../../features/projects/pages/ProjectPage"
 import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
 import CompanyActivitiesPage from "../../features/activities/pages/CompanyActivitiesPage";
 
+import { AuthProvider } from "../context/AuthContext";
+import { BusinessProvider } from "../context/BusinessContext";
+
 export default function AppRouter() {
     return (
-        <Routes>
-            <Route element={<AuthLayout />}>
-                <Route path="/" element={<LoginPage />} />
-            </Route>
+        <AuthProvider>
+            <BusinessProvider >
+                <BrowserRouter>
+                    <Routes>
+                        <Route element={<AuthLayout />}>
+                            <Route path="/" element={<LoginPage />} />
+                        </Route>
+                            <Route element={<ProtectedRoute />} >
+                                <Route element={<MainLayout />}>
+                                    <Route path="/entrepeneurship" element={<EntrepeneurshipPage />} />
 
-            <Route element={<ProtectedRoute />}>
-                <Route element={<MainLayout />}>
-                    <Route path="/entrepeneurship" element={<EntrepeneurshipPage />} />
+                                    <Route path="/entrepeneurship/companies" element={<CompanyPage />} />
+                                    <Route path="/entrepeneurship/finances" element={<Finances />} />
+                                    <Route path="/entrepeneurship/templates" element={<TemplatesPage />} />
+                                    <Route path="/entrepeneurship/contacts" element={<ContactsPage />} />
 
-                    <Route path="/entrepeneurship/companies" element={<CompanyPage />} />
-                    <Route path="/entrepeneurship/finances" element={<Finances />} />
-                    <Route path="/entrepeneurship/templates" element={<TemplatesPage />} />
-                    <Route path="/entrepeneurship/contacts" element={<ContactsPage />} />
+                                    <Route path="/entrepeneurship/:companyId/projects" element={<ProjectsPage />} />
+                                    <Route path="/entrepeneurship/:companyId/projects/project" element={<ProjectPage />} />
+                                    <Route path="/entrepeneurship/:companyId/documents" element={<DocumentsPage />} />
+                                    <Route path="/entrepeneurship/:companyId/contacts" element={<CompanyContactsPage />} />
+                                    <Route path="/entrepeneurship/:companyId/activities" element={<CompanyActivitiesPage />} />
+                                    
+                                </Route>
+                            </Route>
+                    </Routes>
+                </BrowserRouter>
+            </BusinessProvider>
+        </AuthProvider>
 
-                    <Route path="/entrepeneurship/company/projects" element={<ProjectsPage />} />
-                    <Route path="/entrepeneurship/company/projects/project" element={<ProjectPage />} />
-                    <Route path="/entrepeneurship/company/documents" element={<DocumentsPage />} />
-                    <Route path="/entrepeneurship/company/contacts" element={<CompanyContactsPage />} />
-                    <Route path="/entrepeneurship/company/activities" element={<CompanyActivitiesPage />} />
-                    
-                </Route>
-            </Route>
-        </Routes>
     )
 }

@@ -5,8 +5,13 @@ import {motion} from "framer-motion";
 import CreateButton from "../../../components/ui/buttons/CreateButton";
 import TemplatesCard from "../components/TemplateCard";
 
+import { useTemplates } from "../hooks/useTemplates";
+
 export default function TemplatesPage() {
 
+    const businessId = localStorage.getItem("businessId");
+
+    const {templates, loading, error} = useTemplates(businessId) 
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
@@ -17,13 +22,24 @@ export default function TemplatesPage() {
 
             <div className="w-full grid grid-cols-3 gap-12 mt-12">
 
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
-                <TemplatesCard name="Reporte Técnico" notes="Comunicar de manera clara, precisa y objetiva los resultados, hallazgos y conclusiones de la evaluacion de vulnerabilidades." status="Cierre" />
+                {loading && (
+                    <p className="mt-8 text-[#959595]">
+                        Cargando empresas...
+                    </p>
+                )}
+
+
+                {error && (
+                    <p className="mt-8 text-red-400">
+                        {error}
+                    </p>
+                )}
+
+                {!loading && !error && (
+                    templates?.map((serviceTemplate) => (
+                        <TemplatesCard key={serviceTemplate._id} serviceTemplate={serviceTemplate} />
+                    ))
+                )}
 
             </div>
 

@@ -1,28 +1,29 @@
-import { Outlet } from "react-router-dom";
-
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 
 import CompanyNavbar from "../../components/layout/CompanyNavbar";
 import ProjectNavbar from "../../components/layout/ProjectNavbar";
 
 export default function MainLayout() {
 
-    const location = useLocation()
+    const location = useLocation();
+    const { companyId } = useParams();
 
-    const isIndividualCompanyRoute = location.pathname.includes("company")
-    const hideNavbar = location.pathname.endsWith("/projects/project") || location.pathname.endsWith("/entrepeneurship")
+    const isIndividualCompanyRoute = Boolean(companyId);
 
-    return(
-        <div className="bg-[#141414] w-full min-h-screen text-[#ECECEC] flex flex-col items-center ">
+    const hideNavbar =
+        location.pathname.endsWith("/projects/project") ||
+        location.pathname.endsWith("/entrepeneurship");
+
+    return (
+        <div className="bg-[#141414] w-full min-h-screen text-[#ECECEC] flex flex-col items-center">
 
             {!hideNavbar && (
-                isIndividualCompanyRoute ? <ProjectNavbar /> : <CompanyNavbar />
-            )}
-
+                isIndividualCompanyRoute ? <ProjectNavbar /> : <CompanyNavbar />)}
 
             <main className="w-[80%]">
                 <Outlet />
             </main>
+
         </div>
-    )
+    );
 }

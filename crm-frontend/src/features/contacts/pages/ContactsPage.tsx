@@ -1,13 +1,15 @@
 import { useState } from "react"
-
 import {motion} from "framer-motion"
 
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import ContactCard from "../components/ContactCard"
 import ContactPopup from "../components/ContactPopup"
 
+import { useAllContacts } from "../hooks/useAllContacts"
+
 export default function ContactsPage() {
 
+    const {contacts, loading, error} = useAllContacts();
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
@@ -25,12 +27,26 @@ export default function ContactsPage() {
                 <p className="text-[#959595] text-right">Principal</p>
             </div>
 
-            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Banco Azteca" email="nando.garcia2504@gmail.com" main="Si" />
-            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="HSBC" email="nando.garcia2504@gmail.com" main="Si" />
-            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="STAR Medica" email="nando.garcia2504@gmail.com" main="Si" />
-            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Jazwares" email="nando.garcia2504@gmail.com" main="Si" />
-            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Bimbo" email="nando.garcia2504@gmail.com" main="Si" />
-            <ContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" company="Mercado Pago" email="nando.garcia2504@gmail.com" main="Si" />
+            {loading && (
+                <p className="mt-8 text-[#959595]">
+                    Cargando contactos...
+                </p>
+            )}
+
+
+            {error && (
+                <p className="mt-8 text-red-400">
+                    {error}
+                </p>
+            )}
+
+            {!loading && !error && contacts.map((contact) => (
+                    <ContactCard
+                        key={contact._id}
+                        contact={contact}
+                    />
+                ))
+            }
 
             {isOpenPopup && (
                 <div

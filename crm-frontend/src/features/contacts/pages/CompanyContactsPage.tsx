@@ -6,8 +6,14 @@ import CreateButton from "../../../components/ui/buttons/CreateButton"
 import ContactPopup from "../components/CompanyContactPopup"
 import CompanyContactCard from "../components/CompanyContactCard"
 
+import { useContacts } from "../hooks/useContacts"
+import { useParams } from "react-router-dom"
+
 export default function CompanyContactsPage() {
 
+    const {companyId} = useParams();
+
+    const {contacts, loading, error} = useContacts(companyId ?? null);
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
@@ -24,12 +30,26 @@ export default function CompanyContactsPage() {
                 <p className="text-[#959595] text-right">Principal</p>
             </div>
 
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
-            <CompanyContactCard fullName="Fernando Garcia Tejeda" position="Auditor Sr." phone="5559518331" email="nando.garcia2504@gmail.com" main="Si" />
+            {loading && (
+                <p className="mt-8 text-[#959595]">
+                    Cargando contactos...
+                </p>
+            )}
+
+
+            {error && (
+                <p className="mt-8 text-red-400">
+                    {error}
+                </p>
+            )}
+
+            {!loading && !error && contacts.map((contact) => (
+                    <CompanyContactCard
+                        key={contact._id}
+                        contact={contact}
+                    />
+                ))
+            }
 
             {isOpenPopup && (
                 <div

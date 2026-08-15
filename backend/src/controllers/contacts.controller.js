@@ -66,7 +66,7 @@ export const getContacts = async (req, res) => {
 
         const { companyId } = req.params;
 
-        const company = await Company.findById(companyId);
+        const company = await Company.findById(companyId)
 
         if (!company) {
             return res.status(404).json({
@@ -76,7 +76,7 @@ export const getContacts = async (req, res) => {
 
         const contacts = await Contact.find({
             company: companyId
-        });
+        }).populate("company", "name");
 
         return res.status(200).json({
             contacts
