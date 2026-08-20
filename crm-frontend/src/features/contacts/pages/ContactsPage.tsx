@@ -6,10 +6,14 @@ import ContactCard from "../components/ContactCard"
 import ContactPopup from "../components/ContactPopup"
 
 import { useAllContacts } from "../hooks/useAllContacts"
+import { useCompanies } from "../../companies/hooks/useCompanies"
 
 export default function ContactsPage() {
 
-    const {contacts, loading, error} = useAllContacts();
+    const businessId = localStorage.getItem("businessId")
+
+    const {contacts, loading, error, createContact} = useAllContacts();
+    const { companies, loading: loadingCompanies} = useCompanies(businessId)
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
@@ -50,10 +54,15 @@ export default function ContactsPage() {
 
             {isOpenPopup && (
                 <div
-                    className="fixed inset-0  flex items-center justify-center z-50"
+                    className="fixed inset-0 flex items-center justify-center z-50"
                     onClick={() => setIsOpenPopup(false)}
                 >
-                        <ContactPopup onClose={() => setIsOpenPopup(false)} />
+                    <ContactPopup
+                        onClose={() => setIsOpenPopup(false)}
+                        companies={companies}
+                        createContact={createContact}
+                        loadingCompanies={loadingCompanies}
+                    />
                 </div>
             )}
         </motion.div>

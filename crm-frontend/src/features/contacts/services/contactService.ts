@@ -1,9 +1,9 @@
 import type { Contact, CreateContactData, UpdateContactData, GetContactResponse, GetContactsResponse, UpdateContactResponse, CreateContactResponse, GetAllContactsResponse } from "../types/contact.types";
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "http://localhost:3000/api/contacts";
 
 export const getAllContacts = async(): Promise<Contact[]> => {
-    const response = await fetch(`${API_URL}/contacts/`)
+    const response = await fetch(`${API_URL}/`)
 
     if(!response.ok) {
         throw new Error (
@@ -17,7 +17,7 @@ export const getAllContacts = async(): Promise<Contact[]> => {
 }
 
 export const getContacts = async(companyId: string): Promise<Contact[]> => {
-    const response = await fetch(`${API_URL}/contacts/${companyId}`)
+    const response = await fetch(`${API_URL}/${companyId}`)
 
     if(!response.ok) {
         throw new Error (
@@ -32,7 +32,7 @@ export const getContacts = async(companyId: string): Promise<Contact[]> => {
 
 export const getContact = async (contactId: string, companyId: string): Promise<Contact> => {
 
-    const response = await fetch(`${API_URL}/contacts/${companyId}/contacts/${contactId}`)
+    const response = await fetch(`${API_URL}/${companyId}/contacts/${contactId}`)
 
     if (!response.ok) {
         throw new Error(

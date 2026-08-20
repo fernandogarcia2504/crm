@@ -25,6 +25,7 @@ export default function ProjectNavbar() {
                     <NavLink to={`/entrepeneurship/${companyId}/projects`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Proyectos</NavLink>
                     <NavLink to={`/entrepeneurship/${companyId}/documents`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Documentos</NavLink>
                     <NavLink to={`/entrepeneurship/${companyId}/activities`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Actividades</NavLink>
+                    <NavLink to={`/entrepeneurship/${companyId}/opportunities`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Oportunidades</NavLink>
 
                 </div>
 

@@ -4,12 +4,12 @@ import { createOpportunity, getOpportunities, getOpportunity, updateOpportunity 
 
 const router = express.Router();
 
-router.post("/:businessId", createOpportunity);
+router.post("/:companyId", createOpportunity);
 
-router.get("/:businessId", getOpportunities);
+router.get("/:companyId", getOpportunities);
 
-router.get("/:businessId/:opportunityId", getOpportunity);
+router.get("/:companyId/:opportunityId", getOpportunity);
 
-router.put("/:businessId/:opportunityId", updateOpportunity);
+router.put("/:companyId/:opportunityId", updateOpportunity);
 
 export default router;

@@ -4,13 +4,13 @@ import { createContact, getContact, getContacts, getAllContacts , updateContact,
 
 const router = express.Router()
 
-router.post("/:companyId", createContact);
+router.get("/", getAllContacts)
 
 router.get("/:companyId", getContacts);
 
-router.get("/", getAllContacts)
-
 router.get("/:companyId/contacts/:contactId", getContact);
+
+router.post("/:companyId", createContact);
 
 router.put("/:companyId/contacts/:contactId", updateContact);
 

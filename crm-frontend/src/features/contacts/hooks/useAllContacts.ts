@@ -1,14 +1,20 @@
 import { useEffect, useState } from "react";
 
-import { getAllContacts } from "../services/contactService";
+import {
+    getAllContacts,
+    createContact as createContactService
+} from "../services/contactService";
 
-import type { Contact } from "../types/contact.types";
+import type {
+    Contact,
+    CreateContactData
+} from "../types/contact.types";
 
 
 export function useAllContacts() {
 
     const [contacts, setContacts] = useState<Contact[]>([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
 
@@ -24,8 +30,6 @@ export function useAllContacts() {
                 const data = await getAllContacts();
 
                 setContacts(data);
-
-                console.log(data);
 
             } catch (error) {
 
@@ -49,9 +53,29 @@ export function useAllContacts() {
     }, []);
 
 
+    const createContact = async (
+        companyId: string,
+        contactData: CreateContactData
+    ) => {
+
+        const newContact = await createContactService(
+            companyId,
+            contactData
+        );
+
+        setContacts((currentContacts) => [
+            ...currentContacts,
+            newContact
+        ]);
+
+        return newContact;
+    };
+
+
     return {
         contacts,
         loading,
-        error
+        error,
+        createContact
     };
 }

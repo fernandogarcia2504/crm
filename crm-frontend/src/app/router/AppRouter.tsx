@@ -18,6 +18,7 @@ import ProjectsPage from "../../features/projects/pages/ProjectsPage";
 import ProjectPage from "../../features/projects/pages/ProjectPage"
 import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
 import CompanyActivitiesPage from "../../features/activities/pages/CompanyActivitiesPage";
+import OpportunitiesPage from "../../features/opportunities/pages/OpportunitiesPage";
 
 import { AuthProvider } from "../context/AuthContext";
 import { BusinessProvider } from "../context/BusinessContext";
@@ -45,6 +46,7 @@ export default function AppRouter() {
                                     <Route path="/entrepeneurship/:companyId/documents" element={<DocumentsPage />} />
                                     <Route path="/entrepeneurship/:companyId/contacts" element={<CompanyContactsPage />} />
                                     <Route path="/entrepeneurship/:companyId/activities" element={<CompanyActivitiesPage />} />
+                                    <Route path="/entrepeneurship/:companyId/opportunities" element={<OpportunitiesPage />} />
                                     
                                 </Route>
                             </Route>

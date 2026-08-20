@@ -8,9 +8,9 @@ import Project from "../models/project.model.js"
 export const createOpportunity = async(req, res) => {
     try {
 
-        const {businessId} = req.params;
+        const {companyId} = req.params;
 
-        const { title, stage, estimatedAmount, estimatedCloseDate, expectedStartDate, priority, lostReason, nextAction, probability, companyId, contactId, serviceTemplateId, notes} = req.body
+        const { title, stage, estimatedAmount, estimatedCloseDate, expectedStartDate, priority, lostReason, nextAction, probability, businessId , serviceTemplateId, notes} = req.body
 
         if(!title) {
             return res.status(400).json({message: "El titulo es requerido"})
@@ -33,12 +33,6 @@ export const createOpportunity = async(req, res) => {
             return res.status(409).json({message: "El company no existe"})
         }
 
-        const contact = await Contact.findById(contactId);
-
-        if(!contact) {
-            return res.status(409).json({message: "El contacto no existe"})
-        }
-
         const serviceTemplate = await ServiceTemplate.findById(serviceTemplateId);
 
         if(!serviceTemplate) {
@@ -48,7 +42,6 @@ export const createOpportunity = async(req, res) => {
         const opportunity = await Opportunity.create({
             business: businessId,
             company: companyId,
-            contact: contactId,
             serviceTemplate: serviceTemplateId,
             title,
             stage,
@@ -81,24 +74,23 @@ export const getOpportunities = async (req, res) => {
 
     try {
 
-        const { businessId } = req.params;
+        const { companyId } = req.params;
 
 
-        const business = await Business.findById(businessId);
+        const company = await Company.findById(companyId);
 
-        if (!business) {
+        if (!company) {
 
             return res.status(404).json({
-                message: "El negocio no existe"
+                message: "El cliente no existe"
             });
 
         }
 
 
         const opportunities = await Opportunity
-            .find({ business: businessId })
-            .populate("company", "name")
-            .populate("contact", "fullName")
+            .find({ company: companyId })
+            .populate("business", "name")
             .populate("serviceTemplate", "name")
             .populate("project", "name")
             .sort({ createdAt: -1 });
@@ -178,7 +170,6 @@ export const updateOpportunity = async (req, res) => {
 
         const {
             companyId,
-            contactId,
             serviceTemplateId,
             title,
             stage,
@@ -214,21 +205,6 @@ export const updateOpportunity = async (req, res) => {
 
             opportunity.company = companyId;
         }
-
-
-        if (contactId) {
-
-            const contact = await Contact.findById(contactId);
-
-            if (!contact) {
-                return res.status(404).json({
-                    message: "El contacto no existe"
-                });
-            }
-
-            opportunity.contact = contactId;
-        }
-
 
         if (serviceTemplateId) {
 

@@ -13,11 +13,6 @@ const OpportunitySchema = new mongoose.Schema ({
         required: true
     },
 
-    contact: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Contact"
-    },
-
     serviceTemplate: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "ServiceTemplate",
