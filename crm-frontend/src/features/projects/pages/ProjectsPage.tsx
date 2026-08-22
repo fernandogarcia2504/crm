@@ -1,42 +1,40 @@
-import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import {motion} from "framer-motion";
 
 import ProjectCard from "../components/ProjectCard";
-import CreateButton from "../../../components/ui/buttons/CreateButton";
-import ProjectPopup from "../components/ProjectPopup";
+
+import { useProjects } from "../hooks/useProjects";
 
 export default function ProjectsPage() {
 
-    const [isOpenPopup, setIsOpenPopup] = useState(false);
+    const { companyId } = useParams();
+
+    const { projects, loading, error } = useProjects(companyId ?? null);
 
    return(
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
-            <div className="w-full flex justify-end mt-12">
-                <CreateButton title="Agregar Proyecto" onClick={() => setIsOpenPopup(true)} />
-            </div>
+
+            {loading && (
+                <p className="mt-12 text-[#959595]">Cargando proyectos...</p>
+            )}
+
+            {error && (
+                <p className="mt-12 text-red-400">{error}</p>
+            )}
+
+            {!loading && !error && projects.length === 0 && (
+                <p className="mt-12 text-[#959595]">No hay proyectos registrados para esta empresa. Un proyecto se crea automáticamente cuando una oportunidad se marca como Ganado.</p>
+            )}
 
             <div className="w-full grid grid-cols-3 gap-12 mt-12">
 
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
-                <ProjectCard title="Primer Semestre 2026" tasks="12/15" percentage="35" date="12 de agosto de 2026" />
+                {!loading && !error && projects.map((project) => (
+                    <ProjectCard key={project._id} project={project} />
+                ))}
 
             </div>
 
-            {isOpenPopup && (
-                <div
-                    className="fixed inset-0  flex items-center justify-center z-50"
-                    onClick={() => setIsOpenPopup(false)}
-                >
-                    <ProjectPopup onClose={() => setIsOpenPopup(false)} />
-                </div>
-            )}
         </motion.div>
     )
 }

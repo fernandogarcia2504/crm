@@ -19,11 +19,11 @@ export const getTemplates = async (businessId: string): Promise<ServiceTemplate[
 
 export const getTemplate = async (businessId: string, templateId: string): Promise<ServiceTemplate> => {
 
-    const response = await fetch(`${API_URL}/service-templates/${businessId}/${templateId}`)
+    const response = await fetch(`${API_URL}/service-templates/${businessId}/templates/${templateId}`)
 
     if (!response.ok) {
         throw new Error(
-            "Error al obtener la empresa"
+            "Error al obtener el template"
         );
     }
 

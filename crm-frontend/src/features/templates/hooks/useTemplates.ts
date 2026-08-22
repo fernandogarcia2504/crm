@@ -26,8 +26,6 @@ export function useTemplates(businessId: string | null) {
 
                 setTemplates(data);
 
-                console.log(data);
-
             } catch (error) {
 
                 console.error(error);

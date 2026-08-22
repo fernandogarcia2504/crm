@@ -1,174 +1,160 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ChevronLeft } from "lucide-react";
+
+import { useProject } from "../hooks/useProject";
+
+import type { ProjectPhase, TaskStatus } from "../types/project.types";
+
+const COLUMNS: { status: TaskStatus; label: string }[] = [
+    { status: "Pendiente", label: "Por hacer" },
+    { status: "En progreso", label: "En progreso" },
+    { status: "Completado", label: "Completado" }
+];
+
+const getPhaseProgress = (phase: ProjectPhase) => {
+
+    if (!phase.checklist.length) return 0;
+
+    const completed = phase.checklist.filter(
+        (task) => task.status === "Completado"
+    ).length;
+
+    return Math.round((completed / phase.checklist.length) * 100);
+};
 
 export default function ProjectPage() {
 
     const navigate = useNavigate();
+    const { companyId, projectId } = useParams();
+
+    const { project, loading, error, updateTaskStatus } = useProject(
+        companyId ?? null,
+        projectId ?? null
+    );
+
+    const [draggedOverColumn, setDraggedOverColumn] = useState<string | null>(null);
+
+    const handleDragStart = (
+        event: React.DragEvent<HTMLDivElement>,
+        phaseId: string,
+        taskId: string
+    ) => {
+        event.dataTransfer.setData(
+            "application/json",
+            JSON.stringify({ phaseId, taskId })
+        );
+    };
+
+    const handleDrop = (
+        event: React.DragEvent<HTMLDivElement>,
+        status: TaskStatus
+    ) => {
+        event.preventDefault();
+        setDraggedOverColumn(null);
+
+        const raw = event.dataTransfer.getData("application/json");
+
+        if (!raw) return;
+
+        const { phaseId, taskId } = JSON.parse(raw) as {
+            phaseId: string;
+            taskId: string;
+        };
+
+        updateTaskStatus(phaseId, taskId, status).catch((error) => {
+            console.error(error);
+        });
+    };
 
     return(
         <div className="w-full flex flex-col mb-12">
-            <button onClick={() => navigate("/entrepeneurship/company/projects")} className="w-full flex flex-row items-center mt-12">
+            <button onClick={() => navigate(`/entrepeneurship/${companyId}/projects`)} className="w-full flex flex-row items-center mt-12">
                 <ChevronLeft/>
                 <p>Regresar</p>
             </button>
 
-            <div className="w-full flex justify-between mt-8">
-                <p>Planeación</p>
-                <p>Porcentaje: 88%</p>
-            </div>
+            {loading && (
+                <p className="mt-8 text-[#959595]">Cargando proyecto...</p>
+            )}
 
-            <div className="w-full flex flex-row  bg-[#171717] rounded-lg shadow-lg p-6 mt-3 gap-12">
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">To-do</p>
+            {error && (
+                <p className="mt-8 text-red-400">{error}</p>
+            )}
 
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <p className="text-[#3550CB] text-center text-sm">+ Agregar tarea</p>
-                </div>
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">In progress</p>
-
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                </div>
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">Done</p>
-
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                </div>  
-            </div>
-
-            <div className="border-b border-b-[#777777] w-full mt-8"></div>
-
-            <div className="w-full flex justify-between mt-8">
-                <p>Ejecución</p>
-                <p>Porcentaje: 15%</p>
-            </div>
-
-            <div className="w-full flex flex-row  bg-[#171717] rounded-lg shadow-lg p-6 mt-3 gap-12">
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">To-do</p>
-
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                </div>
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">In progress</p>
-                </div>
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">Done</p>
-                </div>  
-            </div>
-
-            <div className="flex items-center justify-center w-full">
-                <button className="w-1/4 rounded-md shadow-lg text-sm py-1 mt-8 bg-[#3550CB]">Ver avance reporte técnico</button>
-            </div>
-
-            <div className="border-b border-b-[#777777] w-full mt-8"></div>
-
-            <div className="w-full flex justify-between mt-8">
-                <p>Cierre</p>
-                <p>Porcentaje: 0%</p>
-            </div>
-
-            <div className="w-full flex flex-row  bg-[#171717] rounded-lg shadow-lg p-6 mt-3 gap-12">
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">To-do</p>
-
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                </div>
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">In progress</p>
-
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
+            {!loading && !error && project && (
+                <>
+                    <div className="w-full flex justify-between mt-8">
+                        <p>{project.name}</p>
+                        <p>Porcentaje: {project.progress}%</p>
                     </div>
 
-                </div>
-                <div className="w-1/3 bg-[#1A1A1A] flex flex-col rounded-md p-4 gap-3">
-                    <p className="mb-2">Done</p>
+                    {[...project.phases]
+                        .sort((a, b) => a.order - b.order)
+                        .map((phase) => (
+                            <div key={phase._id} className="w-full flex flex-col">
+                                <div className="border-b border-b-[#777777] w-full mt-8 mb-8"></div>
 
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                    <div className="w-full flex flex-col bg-[#212121] rounded-sm p-3">
-                        <p className="text-sm">Carta de inicio</p>
-                        <p className="text-sm text-[#959595]">Documento donde formalmente se da inicio con el ejercicio a realizar, se definen las fechas compromiso, actividades a realizar, limitaciones y alcance</p>
-                    </div>
-                </div>  
-            </div>
+                                <div className="w-full flex justify-between">
+                                    <p>{phase.name}</p>
+                                    <p>Porcentaje: {getPhaseProgress(phase)}%</p>
+                                </div>
+
+                                <div className="w-full flex flex-row bg-[#171717] rounded-lg shadow-lg p-6 mt-3 gap-12">
+                                    {COLUMNS.map((column) => {
+
+                                        const tasks = phase.checklist.filter(
+                                            (task) => task.status === column.status
+                                        );
+
+                                        const columnKey = `${phase._id}-${column.status}`;
+
+                                        return (
+                                            <div
+                                                key={columnKey}
+                                                onDragOver={(event) => {
+                                                    event.preventDefault();
+                                                    setDraggedOverColumn(columnKey);
+                                                }}
+                                                onDragLeave={() =>
+                                                    setDraggedOverColumn((current) =>
+                                                        current === columnKey ? null : current
+                                                    )
+                                                }
+                                                onDrop={(event) => handleDrop(event, column.status)}
+                                                className={`w-1/3 flex flex-col rounded-md p-4 gap-3 transition-colors ${
+                                                    draggedOverColumn === columnKey
+                                                        ? "bg-[#232323] outline-1 outline-dashed outline-[#2F76D2]"
+                                                        : "bg-[#1A1A1A]"
+                                                }`}
+                                            >
+                                                <p className="mb-2">{column.label}</p>
+
+                                                {tasks.length === 0 && (
+                                                    <p className="text-sm text-[#5c5c5c]">Sin tareas</p>
+                                                )}
+
+                                                {tasks.map((task) => (
+                                                    <div
+                                                        key={task._id}
+                                                        draggable
+                                                        onDragStart={(event) =>
+                                                            handleDragStart(event, phase._id, task._id)
+                                                        }
+                                                        className="w-full flex flex-col bg-[#212121] rounded-sm p-3 cursor-grab active:cursor-grabbing"
+                                                    >
+                                                        <p className="text-sm">{task.task}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                </>
+            )}
         </div>
     )
 }

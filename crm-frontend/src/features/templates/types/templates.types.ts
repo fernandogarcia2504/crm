@@ -1,4 +1,5 @@
 export interface ServiceTemplatePhase {
+    _id?: string;
     name: string;
     order: number;
     description: string;
@@ -6,11 +7,13 @@ export interface ServiceTemplatePhase {
 }
 
 export interface ServiceTemplateDeliverable {
+    _id?: string;
     name: string;
     required: boolean;
 }
 
 export interface ServiceTemplateExpectedEvidence {
+    _id?: string;
     name: string;
     required: boolean;
 }

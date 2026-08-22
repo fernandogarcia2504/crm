@@ -4,6 +4,7 @@ import {motion} from "framer-motion";
 
 import CreateButton from "../../../components/ui/buttons/CreateButton";
 import TemplatesCard from "../components/TemplateCard";
+import TemplatePopup from "../components/TemplatePopup";
 
 import { useTemplates } from "../hooks/useTemplates";
 
@@ -11,7 +12,7 @@ export default function TemplatesPage() {
 
     const businessId = localStorage.getItem("businessId");
 
-    const {templates, loading, error} = useTemplates(businessId) 
+    const {templates, loading, error, createTemplate} = useTemplates(businessId) 
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 
     return(
@@ -42,6 +43,15 @@ export default function TemplatesPage() {
                 )}
 
             </div>
+
+            {isOpenPopup && (
+                <div
+                    className="fixed inset-0 flex items-center justify-center z-50"
+                    onClick={() => setIsOpenPopup(false)}
+                >
+                    <TemplatePopup onClose={() => setIsOpenPopup(false)} createTemplate={createTemplate} />
+                </div>
+            )}
 
         </motion.div>
     )

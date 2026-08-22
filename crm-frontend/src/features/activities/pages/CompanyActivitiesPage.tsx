@@ -1,59 +1,42 @@
-import { useState } from "react";
+import { useParams } from "react-router-dom";
 
-import {motion} from "framer-motion"
+import { motion } from "framer-motion";
 
-import ActivityPopup from "../components/ActivityPopup";
-import CreateButton from "../../../components/ui/buttons/CreateButton"
-import ActivityCard from "../components/ActivityCard"
+import OpportunityActivity from "../components/OpportunityActivity";
+
+import { useOpportunities } from "../../opportunities/hooks/useOpportunities";
 
 export default function CompanyActivitiesPage() {
 
-    const [isOpenPopup, setIsOpenPopup] = useState(false);
+    const { companyId } = useParams();
+
+    const { opportunities, loading, error, syncOpportunity } = useOpportunities(companyId ?? null);
 
     return(
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col pb-12">
-            <div  className="w-full flex justify-end mt-12">
-                <CreateButton title="Agregar Actividad" onClick={() => setIsOpenPopup(true)} />
-            </div>
 
-            <div className="w-full flex flex-col rounded-lg shadow-lg bg-[#171717] px-4 py-5 gap-4 mt-8">
-                <p className="px-3">Secuencia de actividades</p>
-
-                <div className="w-full rounded-md flex flex-col gap-3 bg-[#212121] p-3 ">
-                    <div className="flex gap-2 items-center">
-                        <p className="text-sm text-[#959595] ">Etapa: </p>
-                        <p className="text-sm ">Reconocimiento</p>
-                    </div>
-
-                    <div className="flex gap-8 items-center">
-                        <p className="text-sm text-[#959595]">12 Actividades registradas</p>
-                        <p className="text-sm text-[#959595]">Acercamiento inicial 12 abril 2026</p>
-                        <p className="text-sm text-[#959595]">1 Projecto Cerrado</p>
-                    </div>
-                </div>
-                <div className="w-full flex flex-col gap-8">
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="call"  />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="email"  />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="meeting" />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="note"  />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="email"  />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="meeting" />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="call"  />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="email"  />
-                    <ActivityCard subject="Llamada con CISO (Fabiola Vega)" nextStep="Agendar sesion demostracion por zoom para el 15 de agosto a las 11 am" date="Mar 25, 2026 a las 10:30 am" result="Completado" type="note" isLast />
-                </div>
-
-
-            </div>
-
-            {isOpenPopup && (
-                <div
-                    className="fixed inset-0  flex items-center justify-center z-50"
-                    onClick={() => setIsOpenPopup(false)}
-                >
-                    <ActivityPopup onClose={() => setIsOpenPopup(false)} />
-                </div>
+            {loading && (
+                <p className="mt-12 text-[#959595]">Cargando actividades...</p>
             )}
+
+            {error && (
+                <p className="mt-12 text-red-400">{error}</p>
+            )}
+
+            {!loading && !error && opportunities.length === 0 && (
+                <p className="mt-12 text-[#959595]">No hay oportunidades registradas para esta empresa.</p>
+            )}
+
+            <div className="w-full flex flex-col gap-10 mt-12">
+                {!loading && !error && opportunities.map((opportunity) => (
+                    <div key={opportunity._id} className="w-full flex flex-col rounded-lg shadow-lg bg-[#171717] px-4 py-5">
+                        <OpportunityActivity
+                            opportunity={opportunity}
+                            onOpportunityUpdate={syncOpportunity}
+                        />
+                    </div>
+                ))}
+            </div>
 
         </motion.div>
     )

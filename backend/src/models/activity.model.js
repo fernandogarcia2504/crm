@@ -36,7 +36,8 @@ const ActivitySchema = new mongoose.Schema ({
             "Demo",
             "Visita",
             "Otro"
-        ]
+        ],
+        default:"Otro"
     },
 
     title: String,

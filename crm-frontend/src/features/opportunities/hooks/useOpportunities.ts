@@ -83,12 +83,27 @@ export function useOpportunities(companyId: string | null) {
 
     };
 
+    // Reemplaza una oportunidad en el estado local sin volver a pedirla
+    // al backend. Se usa cuando otra operación (p. ej. crear una actividad
+    // que cambia la etapa a "Ganado") ya devuelve la oportunidad actualizada.
+    const syncOpportunity = (updatedOpportunity: Opportunity) => {
+
+        setOpportunities((currentOpportunities) =>
+            currentOpportunities.map((opportunity) =>
+                opportunity._id === updatedOpportunity._id
+                    ? updatedOpportunity
+                    : opportunity
+            )
+        );
+    };
+
     return {
         opportunities,
         loading,
         error,
         createOpportunity,
-        updateOpportunity
+        updateOpportunity,
+        syncOpportunity
     }
 
 }

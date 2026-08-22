@@ -1,5 +1,3 @@
-import { useNavigate, useParams } from "react-router-dom";
-
 import {motion} from "framer-motion"
 import { LoaderCircle, Banknote } from 'lucide-react';
 
@@ -10,8 +8,6 @@ interface OpportunityCardProps {
 }
 
 export default function OpportunityCard({opportunity}: OpportunityCardProps) {
-
-    const navigate = useNavigate();
 
     const formattedDate =
         opportunity.expectedStartDate
@@ -26,7 +22,6 @@ export default function OpportunityCard({opportunity}: OpportunityCardProps) {
 
     return(
         <motion.button 
-            onClick={() => navigate("/entrepeneurship/company/projects/project")} 
             className="bg-[#1A1A1A] rounded-md shadow-lg px-4 py-4 cursor-pointer"
             whileHover={{ y: -6, scale: 1.02}}
             whileTap={{ scale: 0.98}}

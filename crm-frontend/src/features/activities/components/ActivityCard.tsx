@@ -1,12 +1,26 @@
-import { Phone } from "lucide-react";
-import { StickyNote } from "lucide-react";
-import { Calendar } from "lucide-react";
-import { Mail } from "lucide-react";
+import {
+    Mail,
+    Phone,
+    MessageCircle,
+    Link,
+    Calendar,
+    Presentation,
+    MapPin,
+    MoreHorizontal
+} from "lucide-react";
 
-type ActivityType = "call" | "email" | "meeting" | "note";
+type ActivityType =
+    | "Correo"
+    | "Llamada"
+    | "WhatsApp"
+    | "LinkedIn"
+    | "Reunion"
+    | "Demo"
+    | "Visita"
+    | "Otro";
 
-interface SetActivityCardProps {
-    subject: string;
+interface ActivityCardProps {
+    title: string;
     result: string;
     nextStep: string;
     date: string;
@@ -15,25 +29,41 @@ interface SetActivityCardProps {
 }
 
 const activityConfig = {
-    call: {
+    Correo: {
+        icon: Mail,
+        color: "#2FD260"
+    },
+    Llamada: {
         icon: Phone,
         color: "#2F76D2"
     },
-    meeting: {
+    WhatsApp: {
+        icon: MessageCircle,
+        color: "#25D366"
+    },
+    LinkedIn: {
+        icon: Link,
+        color: "#2F9CD2"
+    },
+    Reunion: {
         icon: Calendar,
         color: "#6B2FD2"
     },
-    note: {
-        icon: StickyNote,
-        color: "#D2CC2F"
+    Demo: {
+        icon: Presentation,
+        color: "#D2822F"
     },
-    email: {
-        icon: Mail,
-        color: "#2FD260"
+    Visita: {
+        icon: MapPin,
+        color: "#D22F5C"
+    },
+    Otro: {
+        icon: MoreHorizontal,
+        color: "#767676"
     }
 }
 
-export default function({ subject, result, nextStep, date, type, isLast=false}: SetActivityCardProps) {
+export default function ActivityCard({ title, result, nextStep, date, type, isLast=false}: ActivityCardProps) {
 
     const {icon: Icon, color} = activityConfig[type];
 
@@ -57,13 +87,12 @@ export default function({ subject, result, nextStep, date, type, isLast=false}: 
             </div>
 
             <div className="flex flex-col ">
-                <p>{subject}</p>
+                <p>{title}</p>
                 <p className="text-sm text-[#959595]">{nextStep}</p>
             </div>
 
             <p className="text-sm text-[#959595]">{date}</p>
 
-            <p className="text-sm text-[#959595] text-right">{result}</p>
         </div>
     )
 }
