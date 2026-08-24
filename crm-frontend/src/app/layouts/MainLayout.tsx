@@ -6,12 +6,12 @@ import ProjectNavbar from "../../components/layout/ProjectNavbar";
 export default function MainLayout() {
 
     const location = useLocation();
-    const { companyId } = useParams();
+    const { companyId, projectId } = useParams();
 
     const isIndividualCompanyRoute = Boolean(companyId);
 
     const hideNavbar =
-        location.pathname.endsWith("/projects/project") ||
+        Boolean(projectId) ||
         location.pathname.endsWith("/entrepeneurship");
 
     return (

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const DocumentSchema = new mongoose.Schema = ({
+const DocumentSchema = new mongoose.Schema({
 
     business:{
         type: mongoose.Schema.Types.ObjectId,
@@ -29,7 +29,8 @@ const DocumentSchema = new mongoose.Schema = ({
             "Factura",
             "Evidencia",
             "Otro"
-        ]
+        ],
+        default:"Otro"
     },
 
     fileName:String,
@@ -40,11 +41,25 @@ const DocumentSchema = new mongoose.Schema = ({
 
     size:Number,
 
-    version:Number,
+    version:{
+        type:Number,
+        default:1
+    },
 
-    storagePath:String,
+    s3Key:{
+        type:String,
+        required:true
+    },
+
+    s3Bucket:{
+        type:String,
+        required:true
+    },
 
     notes:String
+
+},{
+    timestamps:true
 })
 
 export default mongoose.model("Document", DocumentSchema);

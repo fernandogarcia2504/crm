@@ -9,6 +9,9 @@ import opportunityRoutes from "./routes/opportunity.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
 import serviceTemplateRoutes from "./routes/serviceTemplate.routes.js"
 import projectRoutes from "./routes/project.routes.js"
+import documentRoutes from "./routes/document.routes.js"
+
+import { verifyToken } from "./middlewares/auth.middleware.js";
 
 const app = express();
 
@@ -18,15 +21,17 @@ app.use(cors({
 
 app.use(express.json());
 
+// Publica: login y registro no requieren token
 app.use("/api/auth", authRoutes);
-app.use("/api/business", businessRoutes);
-app.use("/api/companies", companyRoutes);
-app.use("/api/contacts", contactRoutes);
-app.use("/api/opportunities", opportunityRoutes);
-app.use("/api/activities", activityRoutes);
-app.use("/api/service-templates", serviceTemplateRoutes);
-app.use("/api/projects", projectRoutes);
+
+// A partir de aqui, todas las rutas requieren un JWT valido
+app.use("/api/business", verifyToken, businessRoutes);
+app.use("/api/companies", verifyToken, companyRoutes);
+app.use("/api/contacts", verifyToken, contactRoutes);
+app.use("/api/opportunities", verifyToken, opportunityRoutes);
+app.use("/api/activities", verifyToken, activityRoutes);
+app.use("/api/service-templates", verifyToken, serviceTemplateRoutes);
+app.use("/api/projects", verifyToken, projectRoutes);
+app.use("/api/documents", verifyToken, documentRoutes);
 
 export default app;
-
-// businessId: 6a7e75318fd7397a2e006725

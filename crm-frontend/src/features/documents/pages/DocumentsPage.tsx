@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import {motion} from "framer-motion"
 
@@ -6,12 +7,28 @@ import DocumentsPopup from "../components/DocumentsPopup";
 import CreateButton from "../../../components/ui/buttons/CreateButton"
 import DocumentCard from "../components/DocumentCard"
 
+import { useDocuments } from "../hooks/useDocuments";
+
 export default function DocumentsPage() {
 
+    const { companyId } = useParams();
+
+    const { documents, loading, error, uploadDocument, deleteDocument } = useDocuments(companyId ?? null);
+
     const [isOpenPopup, setIsOpenPopup] = useState(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+
+    const handleDelete = async (documentId: string) => {
+        try {
+            await deleteDocument(documentId);
+        } catch (error) {
+            console.error(error);
+            setDeleteError(error instanceof Error ? error.message : "Error al eliminar el documento");
+        }
+    };
 
     return(
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col">
+        <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col pb-12">
             <div className="w-full flex justify-end mt-12">
                 <CreateButton title="Agregar Documento" onClick={() => setIsOpenPopup(true)}/>
             </div>
@@ -24,15 +41,32 @@ export default function DocumentsPage() {
                 <p className="text-[#959595] ">Eliminar</p>
             </div>
 
-            <DocumentCard name="Reporte Tecnico WebGoat.docx" size="15 MB" category="Reporte Tecnico" notes="V1.3 del documento final, falta documentacion de pruebas con nessus" />
-            <DocumentCard name="Factura evaluacion primer semestre.pdf" size="15 MB" category="Factura" notes="Factura" />
+            {loading && (
+                <p className="mt-8 text-[#959595]">Cargando documentos...</p>
+            )}
+
+            {error && (
+                <p className="mt-8 text-red-400">{error}</p>
+            )}
+
+            {deleteError && (
+                <p className="mt-8 text-red-400">{deleteError}</p>
+            )}
+
+            {!loading && !error && documents.length === 0 && (
+                <p className="mt-8 text-[#959595]">No hay documentos registrados para esta empresa.</p>
+            )}
+
+            {!loading && !error && documents.map((document) => (
+                <DocumentCard key={document._id} document={document} onDelete={handleDelete} />
+            ))}
 
             {isOpenPopup && (
                 <div
                     className="fixed inset-0  flex items-center justify-center z-50"
                     onClick={() => setIsOpenPopup(false)}
                 >
-                    <DocumentsPopup onClose={() => setIsOpenPopup(false)} />
+                    <DocumentsPopup onClose={() => setIsOpenPopup(false)} uploadDocument={uploadDocument} />
                 </div>
             )}
         </motion.div>

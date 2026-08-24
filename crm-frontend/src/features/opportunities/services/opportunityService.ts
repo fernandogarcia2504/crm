@@ -3,7 +3,14 @@ import type { Opportunity, CreateOpportunityData, CreateOpportunityResponse, Upd
 const API_URL = "http://localhost:3000/api/opportunities";
 
 export const getOpportunities = async(companyId: string): Promise<Opportunity[]> => {
-    const response = await fetch(`${API_URL}/${companyId}`)
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if(!response.ok) {
         throw new Error (
@@ -18,7 +25,13 @@ export const getOpportunities = async(companyId: string): Promise<Opportunity[]>
 
 export const getOpportunity = async (opportunityId: string, companyId: string): Promise<Opportunity> => {
 
-    const response = await fetch(`${API_URL}/${companyId}/${opportunityId}`)
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}/${opportunityId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if (!response.ok) {
         throw new Error(
@@ -34,10 +47,13 @@ export const getOpportunity = async (opportunityId: string, companyId: string): 
 
 export const createOpportunity = async (companyId: string, opportunityData: CreateOpportunityData): Promise<Opportunity> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${API_URL}/${companyId}`, {
         method:"POST",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
         },
 
         body: JSON.stringify(opportunityData)
@@ -56,10 +72,13 @@ export const createOpportunity = async (companyId: string, opportunityData: Crea
 
 export const updateOpportunity = async (companyId: string, opportunityId: string, opportunityData: UpdateOpportunityData ): Promise<Opportunity> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch( `${API_URL}/${companyId}/${opportunityId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
 
             body: JSON.stringify(opportunityData)
@@ -76,4 +95,3 @@ export const updateOpportunity = async (companyId: string, opportunityId: string
 
     return data.opportunity;
 };
-

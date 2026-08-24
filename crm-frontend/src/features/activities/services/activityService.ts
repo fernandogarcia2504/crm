@@ -3,7 +3,14 @@ import type { Activity, CreateActivityResponse, CreateActivityData, GetActivitie
 const API_URL = "http://localhost:3000/api/activities";
 
 export const getActivities = async(opportunityId: string): Promise<Activity[]> => {
-    const response = await fetch(`${API_URL}/${opportunityId}`)
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${opportunityId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if(!response.ok) {
         throw new Error (
@@ -18,7 +25,13 @@ export const getActivities = async(opportunityId: string): Promise<Activity[]> =
 
 export const getActivity = async (opportunityId: string, activityId: string): Promise<Activity> => {
 
-    const response = await fetch(`${API_URL}/${opportunityId}/${activityId}`)
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${opportunityId}/${activityId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if (!response.ok) {
         throw new Error(
@@ -34,10 +47,13 @@ export const getActivity = async (opportunityId: string, activityId: string): Pr
 
 export const createActivity = async (opportunityId: string, activityData: CreateActivityData): Promise<CreateActivityResponse> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${API_URL}/${opportunityId}`, {
         method:"POST",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
         },
 
         body: JSON.stringify(activityData)

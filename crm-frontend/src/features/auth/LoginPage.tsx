@@ -92,7 +92,7 @@ export default function() {
 
                     <div className="w-full flex flex-col gap-3">
                         <label className="text-sm">Contraseña</label>
-                        <input name="password" value={formData.password} onChange={handleChange} type="text" className="w-full rounded-md px-3 py-1 bg-[#212121] placeholder:text-sm" placeholder="Ingresa tu contraseña..." required />
+                        <input name="password" value={formData.password} onChange={handleChange} type="password" className="w-full rounded-md px-3 py-1 bg-[#212121] placeholder:text-sm" placeholder="Ingresa tu contraseña..." required />
                     </div>
 
                     {error && (

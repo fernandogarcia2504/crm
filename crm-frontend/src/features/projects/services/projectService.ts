@@ -4,7 +4,13 @@ const API_URL = "http://localhost:3000/api/projects";
 
 export const getProjects = async (companyId: string): Promise<Project[]> => {
 
-    const response = await fetch(`${API_URL}/${companyId}`);
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
 
     const data: GetProjectsResponse = await response.json();
 
@@ -19,7 +25,13 @@ export const getProjects = async (companyId: string): Promise<Project[]> => {
 
 export const getProject = async (companyId: string, projectId: string): Promise<Project> => {
 
-    const response = await fetch(`${API_URL}/${companyId}/${projectId}`);
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}/${projectId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
 
     const data: GetProjectResponse = await response.json();
 
@@ -40,12 +52,15 @@ export const updateTaskStatus = async (
     status: TaskStatus
 ): Promise<Project> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch(
         `${API_URL}/${companyId}/${projectId}/phases/${phaseId}/checklist/${taskId}`,
         {
             method: "PATCH",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
             body: JSON.stringify({ status })
         }

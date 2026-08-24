@@ -3,8 +3,14 @@ import type { Company, CreateCompanyData, UpdateCompanyData, GetCompaniesRespons
 const API_URL = "http://localhost:3000/api";
 
 export const getCompanies = async (businessId: string): Promise<Company[]> => {
-    
-    const response = await fetch(`${API_URL}/companies/${businessId}`)
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/companies/${businessId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if(!response.ok){
         throw new Error(
@@ -19,7 +25,13 @@ export const getCompanies = async (businessId: string): Promise<Company[]> => {
 
 export const getCompany = async (businessId: string, companyId: string): Promise<Company> => {
 
-    const response = await fetch(`${API_URL}/companies/${businessId}/${companyId}`)
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/companies/${businessId}/${companyId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if (!response.ok) {
         throw new Error(
@@ -34,11 +46,14 @@ export const getCompany = async (businessId: string, companyId: string): Promise
 }
 
 export const createCompany = async (businessId: string, companyData: CreateCompanyData): Promise<Company> => {
-    
+
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${API_URL}/companies/${businessId}`, {
         method:"POST",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
         },
 
         body: JSON.stringify(companyData)
@@ -57,10 +72,13 @@ export const createCompany = async (businessId: string, companyData: CreateCompa
 
 export const updateCompany = async (businessId: string, companyId: string, companyData: UpdateCompanyData ): Promise<Company> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch( `${API_URL}/companies/${businessId}/${companyId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
 
             body: JSON.stringify(companyData)
@@ -79,8 +97,14 @@ export const updateCompany = async (businessId: string, companyId: string, compa
 };
 
 export const deleteCompany = async ( businessId: string, companyId: string ): Promise<string> => {
+
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${API_URL}/companies/${businessId}/${companyId}`, {
-            method: "DELETE"
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
         }
     );
 

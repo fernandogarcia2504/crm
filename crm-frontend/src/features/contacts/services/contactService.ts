@@ -3,7 +3,14 @@ import type { Contact, CreateContactData, UpdateContactData, GetContactResponse,
 const API_URL = "http://localhost:3000/api/contacts";
 
 export const getAllContacts = async(): Promise<Contact[]> => {
-    const response = await fetch(`${API_URL}/`)
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if(!response.ok) {
         throw new Error (
@@ -17,7 +24,14 @@ export const getAllContacts = async(): Promise<Contact[]> => {
 }
 
 export const getContacts = async(companyId: string): Promise<Contact[]> => {
-    const response = await fetch(`${API_URL}/${companyId}`)
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if(!response.ok) {
         throw new Error (
@@ -32,7 +46,13 @@ export const getContacts = async(companyId: string): Promise<Contact[]> => {
 
 export const getContact = async (contactId: string, companyId: string): Promise<Contact> => {
 
-    const response = await fetch(`${API_URL}/${companyId}/contacts/${contactId}`)
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}/contacts/${contactId}`, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    })
 
     if (!response.ok) {
         throw new Error(
@@ -48,10 +68,13 @@ export const getContact = async (contactId: string, companyId: string): Promise<
 
 export const createContact = async (companyId: string, contactData: CreateContactData): Promise<Contact> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch(`${API_URL}/${companyId}`, {
         method:"POST",
         headers:{
-            "Content-Type":"application/json"
+            "Content-Type":"application/json",
+            "Authorization": `Bearer ${token}`
         },
 
         body: JSON.stringify(contactData)
@@ -70,10 +93,13 @@ export const createContact = async (companyId: string, contactData: CreateContac
 
 export const updateContact = async (companyId: string, contactId: string, contactData: UpdateContactData ): Promise<Contact> => {
 
+    const token = localStorage.getItem("token");
+
     const response = await fetch( `${API_URL}/${companyId}/contacts/${contactId}`, {
             method: "PUT",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
             },
 
             body: JSON.stringify(contactData)
@@ -90,6 +116,3 @@ export const updateContact = async (companyId: string, contactId: string, contac
 
     return data.contact;
 };
-
-
-
