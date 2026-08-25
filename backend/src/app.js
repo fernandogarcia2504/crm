@@ -10,6 +10,9 @@ import activityRoutes from "./routes/activity.routes.js";
 import serviceTemplateRoutes from "./routes/serviceTemplate.routes.js"
 import projectRoutes from "./routes/project.routes.js"
 import documentRoutes from "./routes/document.routes.js"
+import employeeRoutes from "./routes/employee.routes.js"
+import phishingCampaignRoutes from "./routes/phishingCampaign.routes.js"
+import gophishRoutes from "./routes/gophish.routes.js"
 
 import { verifyToken } from "./middlewares/auth.middleware.js";
 
@@ -21,10 +24,8 @@ app.use(cors({
 
 app.use(express.json());
 
-// Publica: login y registro no requieren token
 app.use("/api/auth", authRoutes);
 
-// A partir de aqui, todas las rutas requieren un JWT valido
 app.use("/api/business", verifyToken, businessRoutes);
 app.use("/api/companies", verifyToken, companyRoutes);
 app.use("/api/contacts", verifyToken, contactRoutes);
@@ -33,5 +34,8 @@ app.use("/api/activities", verifyToken, activityRoutes);
 app.use("/api/service-templates", verifyToken, serviceTemplateRoutes);
 app.use("/api/projects", verifyToken, projectRoutes);
 app.use("/api/documents", verifyToken, documentRoutes);
+app.use("/api/employees", verifyToken, employeeRoutes);
+app.use("/api/phishing-campaigns", verifyToken, phishingCampaignRoutes);
+app.use("/api/gophish", verifyToken, gophishRoutes);
 
 export default app;

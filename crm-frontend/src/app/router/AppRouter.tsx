@@ -1,4 +1,4 @@
-import { Routes, Route, Router, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 
 import ProtectedRoute from "./ProtectedRoute";
 import MainLayout from "../layouts/MainLayout";
@@ -20,6 +20,10 @@ import ProjectPage from "../../features/projects/pages/ProjectPage"
 import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
 import CompanyActivitiesPage from "../../features/activities/pages/CompanyActivitiesPage";
 import OpportunitiesPage from "../../features/opportunities/pages/OpportunitiesPage";
+
+import CompanyEmployeesPage from "../../features/employees/pages/CompanyEmployeesPage";
+import ProjectCampaignsPage from "../../features/phishing/pages/ProjectCampaignsPage";
+import CampaignPage from "../../features/phishing/pages/CampaignPage";
 
 import { AuthProvider } from "../context/AuthContext";
 import { BusinessProvider } from "../context/BusinessContext";
@@ -49,6 +53,10 @@ export default function AppRouter() {
                                     <Route path="/entrepeneurship/:companyId/contacts" element={<CompanyContactsPage />} />
                                     <Route path="/entrepeneurship/:companyId/activities" element={<CompanyActivitiesPage />} />
                                     <Route path="/entrepeneurship/:companyId/opportunities" element={<OpportunitiesPage />} />
+
+                                    <Route path="/entrepeneurship/:companyId/employees" element={<CompanyEmployeesPage />} />
+                                    <Route path="/entrepeneurship/:companyId/projects/:projectId/campaigns" element={<ProjectCampaignsPage />} />
+                                    <Route path="/entrepeneurship/:companyId/projects/:projectId/campaigns/:campaignId" element={<CampaignPage />} />
                                     
                                 </Route>
                             </Route>
