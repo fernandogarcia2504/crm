@@ -3,7 +3,7 @@ import Business from "../models/business.model.js"
 export const createBusiness = async (req, res) => {
     try{
 
-        const {name, description} = req.body;
+        const {name, description, type, gophishUrl} = req.body;
 
         if(!name || !description) {
             return res.status(400).json({
@@ -21,16 +21,14 @@ export const createBusiness = async (req, res) => {
 
         const business = await Business.create({
             name,
-            description
+            description,
+            type,
+            gophishUrl
         });
 
         return res.status(201).json({
             message: "Empresa creada correctamente",
-            business: {
-                id: business._id,
-                name: business.name,
-                description: business.description
-            }
+            business
         });
 
     } catch(error){
@@ -93,7 +91,7 @@ export const updateBusiness = async (req, res) => {
     try {
 
         const { id } = req.params;
-        const { name, description, active } = req.body;
+        const { name, description, active, type, gophishUrl } = req.body;
 
         const business = await Business.findById(id);
 
@@ -126,16 +124,19 @@ export const updateBusiness = async (req, res) => {
             business.active = active;
         }
 
+        if (type !== undefined) {
+            business.type = type;
+        }
+
+        if (gophishUrl !== undefined) {
+            business.gophishUrl = gophishUrl;
+        }
+
         await business.save();
 
         return res.status(200).json({
             message: "Empresa actualizada correctamente",
-            business: {
-                id: business._id,
-                name: business.name,
-                description: business.description,
-                active: business.active
-            }
+            business
         });
 
     } catch (error) {

@@ -96,7 +96,7 @@ export default function CompanyEmployeesPage() {
                                 <button
                                     type="button"
                                     onClick={() => navigator.clipboard.writeText(
-                                        `${credential.username} / ${credential.password}`
+                                        `${credential.password}`
                                     )}
                                     title="Copiar usuario y contraseña"
                                 >

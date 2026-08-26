@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Fish } from "lucide-react";
+
+import { BusinessContext } from "../../../app/context/BusinessContext";
 
 import { useProject } from "../hooks/useProject";
 
@@ -28,6 +30,8 @@ export default function ProjectPage() {
 
     const navigate = useNavigate();
     const { companyId, projectId } = useParams();
+
+    const businessContext = useContext(BusinessContext);
 
     const { project, loading, error, updateTaskStatus } = useProject(
         companyId ?? null,
@@ -85,9 +89,24 @@ export default function ProjectPage() {
 
             {!loading && !error && project && (
                 <>
-                    <div className="w-full flex justify-between mt-8">
+                    <div className="w-full flex justify-between items-center mt-8">
                         <p>{project.name}</p>
-                        <p>Porcentaje: {project.progress}%</p>
+
+                        <div className="flex items-center gap-6">
+                            {/* Solo aplica al negocio de concientización en
+                                seguridad, no a evaluación de vulnerabilidades */}
+                            {businessContext?.isSecurityAwarenessBusiness && (
+                                <button
+                                    onClick={() => navigate(`/entrepeneurship/${companyId}/projects/${projectId}/campaigns`)}
+                                    className="flex items-center gap-2 bg-[#232323] hover:bg-[#2F2F2F] rounded-md px-3 py-1 text-sm transition duration-300"
+                                >
+                                    <Fish size={14} />
+                                    <p>Campañas de phishing</p>
+                                </button>
+                            )}
+
+                            <p>Porcentaje: {project.progress}%</p>
+                        </div>
                     </div>
 
                     {[...project.phases]

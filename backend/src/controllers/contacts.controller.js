@@ -246,8 +246,21 @@ export const deleteContact = async (req, res) => {
 export const getAllContacts = async (req, res) => {
     try {
 
-        const contacts = await Contact.find()
-            .populate("company", "name");
+        const { businessId } = req.query;
+
+        if (!businessId) {
+            return res.status(400).json({
+                message: "El businessId es requerido"
+            });
+        }
+
+        const companies = await Company.find({ business: businessId }).select("_id");
+
+        const companyIds = companies.map((company) => company._id);
+
+        const contacts = await Contact.find({
+            company: { $in: companyIds }
+        }).populate("company", "name");
 
         return res.status(200).json({
             contacts

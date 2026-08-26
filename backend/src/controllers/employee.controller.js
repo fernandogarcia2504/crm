@@ -3,7 +3,7 @@ import crypto from "crypto";
 
 import Employee from "../models/employee.model.js";
 import Company from "../models/company.model.js";
-import Course from "../models/Course Models/course.model.js";
+import Course from "../models/course.model.js";
 
 // Genera una contraseña temporal legible para el curso (12 caracteres,
 // sin ambiguos como 0/O o l/1)
@@ -29,9 +29,11 @@ const issueCourseCredentials = async (email) => {
 
     const passwordHash = await bcrypt.hash(plainPassword, 10);
 
+    const normalizedUsername = email.trim().toLowerCase();
+
     return {
         courseAccount: {
-            username: email,
+            username: email.trim().toLowerCase(),
             passwordHash,
             credentialsIssuedAt: new Date(),
             enrolled: false,
@@ -98,6 +100,8 @@ export const createEmployee = async (req, res) => {
             notes,
             courseAccount
         });
+
+        const persisted = await Employee.findById(employee._id);
 
         return res.status(201).json({
             message: "Empleado creado exitosamente",
@@ -370,6 +374,7 @@ export const regenerateCourseCredentials = async (req, res) => {
 
         await employee.save();
 
+        const persisted = await Employee.findById(employee._id);
         return res.status(200).json({
             message: "Credenciales regeneradas exitosamente",
             employee: serializeEmployee(employee, plainPassword)

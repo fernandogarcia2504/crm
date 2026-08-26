@@ -17,9 +17,9 @@ import TemplatePage from "../../features/templates/pages/TemplatePage";
 import DocumentsPage from "../../features/documents/pages/DocumentsPage";
 import ProjectsPage from "../../features/projects/pages/ProjectsPage";
 import ProjectPage from "../../features/projects/pages/ProjectPage"
-import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
 import CompanyActivitiesPage from "../../features/activities/pages/CompanyActivitiesPage";
 import OpportunitiesPage from "../../features/opportunities/pages/OpportunitiesPage";
+import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
 
 import CompanyEmployeesPage from "../../features/employees/pages/CompanyEmployeesPage";
 import ProjectCampaignsPage from "../../features/phishing/pages/ProjectCampaignsPage";

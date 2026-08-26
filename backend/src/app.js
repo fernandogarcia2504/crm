@@ -13,9 +13,9 @@ import documentRoutes from "./routes/document.routes.js"
 import employeeRoutes from "./routes/employee.routes.js"
 import phishingCampaignRoutes from "./routes/phishingCampaign.routes.js"
 import gophishRoutes from "./routes/gophish.routes.js"
-import courseRoutes from "./routes/Course Routes/course.routes.js"
-import courseAuthRoutes from "./routes/Course Routes/courseAuth.routes.js"
-import coursePortalRoutes from "./routes/Course Routes/coursePortal.routes.js"
+import courseRoutes from "./routes/course.routes.js"
+import courseAuthRoutes from "./routes/courseAuth.routes.js"
+import coursePortalRoutes from "./routes/coursePortal.routes.js"
 
 import { verifyToken, verifyEmployeeToken } from "./middlewares/auth.middleware.js";
 

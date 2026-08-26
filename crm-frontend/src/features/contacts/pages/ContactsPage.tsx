@@ -12,7 +12,7 @@ export default function ContactsPage() {
 
     const businessId = localStorage.getItem("businessId")
 
-    const {contacts, loading, error, createContact} = useAllContacts();
+    const {contacts, loading, error, createContact} = useAllContacts(businessId);
     const { companies, loading: loadingCompanies} = useCompanies(businessId)
     const [isOpenPopup, setIsOpenPopup] = useState(false);
 

@@ -1,9 +1,9 @@
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import s3Client from "../../config/s3.js";
-import Employee from "../../models/employee.model.js";
-import Course from "../../models/Course Models/course.model.js";
+import s3Client from "../config/s3.js";
+import Employee from "../models/employee.model.js";
+import Course from "../models/course.model.js";
 
 const SIGNED_URL_EXPIRES_IN = 900; // 15 minutos, igual que documentos
 

@@ -1,6 +1,6 @@
 import express from "express";
 
-import { courseContentUpload } from "../../middlewares/upload.middleware.js";
+import { courseContentUpload } from "../middlewares/upload.middleware.js";
 
 import {
     createCourse,
@@ -13,7 +13,7 @@ import {
     deleteModule,
     uploadModulePdf,
     uploadModuleVideo
-} from "../../controllers/Course Controllers/course.controller.js";
+} from "../controllers/course.controller.js";
 
 const router = express.Router();
 

@@ -5,7 +5,7 @@ import {
     getMyCourse,
     completeModule,
     submitQuiz
-} from "../../controllers/Course Controllers/coursePortal.controller.js";
+} from "../controllers/coursePortal.controller.js";
 
 const router = express.Router();
 

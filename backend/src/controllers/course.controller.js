@@ -1,8 +1,8 @@
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
-import s3Client, { S3_BUCKET } from "../../config/s3.js";
-import Business from "../../models/business.model.js";
-import Course from "../../models/Course Models/course.model.js";
+import s3Client, { S3_BUCKET } from "../config/s3.js";
+import Business from "../models/business.model.js";
+import Course from "../models/course.model.js";
 
 const sanitizeFileName = (fileName) =>
     fileName
