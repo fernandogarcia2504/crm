@@ -1,8 +1,15 @@
 import { NavLink } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 
 import { Menu } from "lucide-react"
 
+import { BusinessContext } from "../../app/context/BusinessContext"
+
 export default function CompanyNavbar() {
+    
+    const navigate = useNavigate();
+    const businessContext = useContext(BusinessContext);
 
     return(
         <div className="w-[80%] flex flex-row items-center py-4 gap-12">
@@ -12,7 +19,7 @@ export default function CompanyNavbar() {
 
             <div className="w-full flex items-center gap-12 border-b border-b-[#777777] py-4">
                 <div className="flex-1">
-                    <p className="font-bold">Evaluacion Vulnerabilidades</p>
+                    <p onClick={() => navigate("/entrepeneurship/companies")} className="font-bold cursor-pointer">{businessContext?.business?.name ?? "..."}</p>
                 </div>
 
                 <div className="flex gap-12">

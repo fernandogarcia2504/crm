@@ -1,7 +1,5 @@
 import multer from "multer";
 
-// Se sube a memoria (buffer) y de ahi se manda directo a S3, sin tocar
-// el disco del servidor.
 const storage = multer.memoryStorage();
 
 const ALLOWED_MIME_TYPES = [
@@ -35,6 +33,32 @@ const upload = multer({
     fileFilter,
     limits: {
         fileSize: 25 * 1024 * 1024 // 25 MB
+    }
+});
+
+
+const COURSE_CONTENT_MIME_TYPES = [
+    ...ALLOWED_MIME_TYPES,
+    "video/mp4",
+    "video/webm",
+    "video/quicktime"
+];
+
+const courseContentFileFilter = (req, file, cb) => {
+
+    if (COURSE_CONTENT_MIME_TYPES.includes(file.mimetype)) {
+        return cb(null, true);
+    }
+
+    cb(new Error("Tipo de archivo no permitido"));
+
+};
+
+export const courseContentUpload = multer({
+    storage,
+    fileFilter: courseContentFileFilter,
+    limits: {
+        fileSize: 1024 * 1024 * 1024 // 1 GB, para videos del curso
     }
 });
 

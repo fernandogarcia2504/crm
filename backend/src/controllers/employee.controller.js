@@ -3,6 +3,7 @@ import crypto from "crypto";
 
 import Employee from "../models/employee.model.js";
 import Company from "../models/company.model.js";
+import Course from "../models/Course Models/course.model.js";
 
 // Genera una contraseña temporal legible para el curso (12 caracteres,
 // sin ambiguos como 0/O o l/1)
@@ -316,6 +317,10 @@ export const updateEmployee = async (req, res) => {
                 employee.courseAccount.progress = courseAccount.progress;
             }
 
+            if (courseAccount.course !== undefined) {
+                employee.courseAccount.course = courseAccount.course;
+            }
+
         }
 
         await employee.save();
@@ -377,6 +382,54 @@ export const regenerateCourseCredentials = async (req, res) => {
         return res.status(500).json({
             message: "Error al regenerar las credenciales"
         });
+
+    }
+
+};
+
+
+// ASIGNAR UN CURSO A TODOS LOS EMPLEADOS DE UNA EMPRESA (ej. al arrancar
+// la campaña de concientizacion con un cliente nuevo)
+export const assignCourseToCompany = async (req, res) => {
+
+    try {
+
+        const { companyId } = req.params;
+        const { courseId } = req.body;
+
+        if (!courseId) {
+            return res.status(400).json({ message: "El courseId es requerido" });
+        }
+
+        const course = await Course.findById(courseId);
+
+        if (!course) {
+            return res.status(404).json({ message: "El curso no existe" });
+        }
+
+        const result = await Employee.updateMany(
+            { company: companyId },
+            {
+                $set: {
+                    "courseAccount.course": courseId,
+                    "courseAccount.enrolled": true,
+                    "courseAccount.enrolledAt": new Date(),
+                    "courseAccount.progress": 0,
+                    "courseAccount.completed": false,
+                    "courseAccount.moduleProgress": []
+                }
+            }
+        );
+
+        return res.status(200).json({
+            message: `Curso asignado a ${result.modifiedCount} empleado(s)`
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({ message: "Error al asignar el curso" });
 
     }
 

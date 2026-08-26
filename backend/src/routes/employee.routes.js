@@ -7,6 +7,7 @@ import {
     getEmployee,
     updateEmployee,
     regenerateCourseCredentials,
+    assignCourseToCompany,
     deleteEmployee
 } from "../controllers/employee.controller.js";
 
@@ -23,6 +24,8 @@ router.post("/:companyId/bulk", bulkCreateEmployees);
 router.put("/:companyId/employees/:employeeId", updateEmployee);
 
 router.post("/:companyId/employees/:employeeId/regenerate-credentials", regenerateCourseCredentials);
+
+router.post("/:companyId/assign-course", assignCourseToCompany);
 
 router.delete("/:companyId/employees/:employeeId", deleteEmployee);
 

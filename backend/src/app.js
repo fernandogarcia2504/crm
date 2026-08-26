@@ -13,13 +13,30 @@ import documentRoutes from "./routes/document.routes.js"
 import employeeRoutes from "./routes/employee.routes.js"
 import phishingCampaignRoutes from "./routes/phishingCampaign.routes.js"
 import gophishRoutes from "./routes/gophish.routes.js"
+import courseRoutes from "./routes/Course Routes/course.routes.js"
+import courseAuthRoutes from "./routes/Course Routes/courseAuth.routes.js"
+import coursePortalRoutes from "./routes/Course Routes/coursePortal.routes.js"
 
-import { verifyToken } from "./middlewares/auth.middleware.js";
+import { verifyToken, verifyEmployeeToken } from "./middlewares/auth.middleware.js";
 
 const app = express();
 
+const allowedOrigins = [
+    process.env.CRM_ORIGIN || "http://localhost:5173",
+    process.env.COURSES_ORIGIN || "http://localhost:5174"
+];
+
 app.use(cors({
-    origin: "http://localhost:5173"
+    origin: (origin, callback) => {
+
+        // Sin origin = llamadas server-to-server / curl / Postman, se dejan pasar
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+
+        callback(new Error("Origen no permitido por CORS"));
+
+    }
 }));
 
 app.use(express.json());
@@ -37,5 +54,13 @@ app.use("/api/documents", verifyToken, documentRoutes);
 app.use("/api/employees", verifyToken, employeeRoutes);
 app.use("/api/phishing-campaigns", verifyToken, phishingCampaignRoutes);
 app.use("/api/gophish", verifyToken, gophishRoutes);
+
+// Contenido de los cursos: administrado por staff (mismo verifyToken de siempre)
+app.use("/api/courses", verifyToken, courseRoutes);
+
+// Portal de cursos para trainees (empleados): login publico + rutas
+// protegidas con su propio token, nunca con el verifyToken de staff
+app.use("/api/course-auth", courseAuthRoutes);
+app.use("/api/course-portal", verifyEmployeeToken, coursePortalRoutes);
 
 export default app;
