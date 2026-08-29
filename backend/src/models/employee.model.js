@@ -37,13 +37,43 @@ const EmployeeSchema = new mongoose.Schema({
 
         credentialsIssuedAt: Date,
 
+        // true mientras la contraseña siga siendo la temporal generada
+        // al enrolar/regenerar credenciales. Se pone en false cuando el
+        // empleado la cambia por una propia (ver changePassword en
+        // coursePortal.controller.js). Los documentos viejos que no
+        // tengan este campo se tratan como true en el codigo (nunca la
+        // cambiaron tampoco), no hace falta migrarlos.
+        mustChangePassword: { type: Boolean, default: true },
+
+        // Curso de concientizacion asignado (solo hay uno activo por
+        // negocio, pero se guarda la referencia por si en el futuro
+        // se crea mas de uno).
+        course: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Course",
+            default: null
+        },
+
         enrolled: { type: Boolean, default: false },
         enrolledAt: Date,
 
         completed: { type: Boolean, default: false },
         completedAt: Date,
 
-        progress: { type: Number, default: 0 }
+        progress: { type: Number, default: 0 },
+
+        // Avance por modulo del curso asignado. Se resetea cada vez que
+        // se (re)asigna un curso (ver assignCourseToCompany).
+        moduleProgress: [{
+
+            module: { type: mongoose.Schema.Types.ObjectId, required: true },
+
+            completed: { type: Boolean, default: false },
+            completedAt: Date,
+
+            quizScore: Number
+
+        }]
 
     },
 

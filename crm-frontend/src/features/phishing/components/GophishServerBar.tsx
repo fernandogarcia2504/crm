@@ -60,7 +60,7 @@ export default function GophishServerBar() {
                     type="text"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    placeholder="https://192.168.100.124:3333"
+                    placeholder="https://192.168.100.108:3333"
                     className="flex-1 bg-[#212121] rounded-md px-3 py-1 text-sm"
                     autoFocus
                 />

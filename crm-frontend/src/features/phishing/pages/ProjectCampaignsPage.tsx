@@ -22,11 +22,13 @@ export default function ProjectCampaignsPage() {
 
     const businessContext = useContext(BusinessContext);
 
-    const { campaigns, loading, error, createCampaign } = useCampaigns(projectId ?? null);
+    const { campaigns, loading, error, createCampaign, deleteCampaign } = useCampaigns(projectId ?? null);
 
     const [employees, setEmployees] = useState<Employee[]>([]);
     const [employeesLoading, setEmployeesLoading] = useState(false);
     const [isOpenPopup, setIsOpenPopup] = useState(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [deleteWarning, setDeleteWarning] = useState<string | null>(null);
 
     // Las campañas de phishing solo existen para el negocio de
     // concientización en seguridad; si alguien llega aquí por URL directa
@@ -59,6 +61,28 @@ export default function ProjectCampaignsPage() {
 
     }, [companyId, isOpenPopup]);
 
+    const handleDelete = async (campaignId: string) => {
+
+        if (!window.confirm("¿Eliminar esta campaña? Se borrará también en Gophish y esta acción no se puede deshacer.")) return;
+
+        try {
+
+            setDeleteError(null);
+            setDeleteWarning(null);
+
+            const gophishWarning = await deleteCampaign(campaignId);
+
+            if (gophishWarning) {
+                setDeleteWarning(gophishWarning);
+            }
+
+        } catch (error) {
+            console.error(error);
+            setDeleteError(error instanceof Error ? error.message : "Error al eliminar la campaña");
+        }
+
+    };
+
     return (
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col mb-16">
 
@@ -80,6 +104,14 @@ export default function ProjectCampaignsPage() {
                 <p className="mt-8 text-red-400">{error}</p>
             )}
 
+            {deleteError && (
+                <p className="mt-8 text-red-400">{deleteError}</p>
+            )}
+
+            {deleteWarning && (
+                <p className="mt-8 text-yellow-400">{deleteWarning}</p>
+            )}
+
             {!loading && !error && campaigns.length === 0 && (
                 <p className="mt-8 text-[#959595]">
                     Todavía no hay campañas lanzadas para este proyecto. Asegúrate de tener empleados cargados en la empresa antes de crear una.
@@ -88,7 +120,7 @@ export default function ProjectCampaignsPage() {
 
             <div className="w-full grid grid-cols-3 gap-12 mt-8">
                 {!loading && !error && campaigns.map((campaign) => (
-                    <CampaignCard key={campaign._id} campaign={campaign} />
+                    <CampaignCard key={campaign._id} campaign={campaign} onDelete={handleDelete} />
                 ))}
             </div>
 

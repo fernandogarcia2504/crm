@@ -5,7 +5,8 @@ import type {
     TargetEvent,
     GetCampaignsResponse,
     GetCampaignResponse,
-    CampaignResponse
+    CampaignResponse,
+    DeleteCampaignResponse
 } from "../types/phishingCampaign.types";
 
 const API_URL = "http://localhost:3000/api/phishing-campaigns";
@@ -133,7 +134,7 @@ export const updateTargetEvent = async (
 export const deleteCampaign = async (
     projectId: string,
     campaignId: string
-): Promise<void> => {
+): Promise<DeleteCampaignResponse> => {
 
     const token = localStorage.getItem("token");
 
@@ -144,10 +145,13 @@ export const deleteCampaign = async (
         }
     });
 
+    const data: DeleteCampaignResponse = await response.json();
+
     if (!response.ok) {
-        const data = await response.json();
         throw new Error(data.message || "Error al eliminar la campaña");
     }
+
+    return data;
 };
 
 export const launchCampaignInGophish = async (

@@ -4,7 +4,8 @@ import {
     getMe,
     getMyCourse,
     completeModule,
-    submitQuiz
+    submitQuiz,
+    changePassword
 } from "../controllers/coursePortal.controller.js";
 
 const router = express.Router();
@@ -16,5 +17,7 @@ router.get("/course", getMyCourse);
 router.post("/modules/:moduleId/complete", completeModule);
 
 router.post("/modules/:moduleId/quiz", submitQuiz);
+
+router.post("/change-password", changePassword);
 
 export default router;

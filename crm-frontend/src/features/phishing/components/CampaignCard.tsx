@@ -1,18 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom";
 
 import { motion } from "framer-motion";
-import { Fish, Calendar } from "lucide-react";
+import { Fish, Calendar, Trash2 } from "lucide-react";
 
 import type { PhishingCampaign } from "../types/phishingCampaign.types";
 
 interface CampaignCardProps {
     campaign: PhishingCampaign;
+    onDelete?: (campaignId: string) => void;
 }
 
-export default function CampaignCard({ campaign }: CampaignCardProps) {
+export default function CampaignCard({ campaign, onDelete }: CampaignCardProps) {
 
     const navigate = useNavigate();
     const { companyId, projectId } = useParams();
+
+    const handleDelete = (event: React.MouseEvent) => {
+        event.stopPropagation();
+        onDelete?.(campaign._id);
+    };
 
     const formattedDate = campaign.launchDate
         ? new Date(campaign.launchDate).toLocaleDateString("es-MX", {
@@ -23,7 +29,9 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
         : "Sin fecha";
 
     return (
-        <motion.button
+        <motion.div
+            role="button"
+            tabIndex={0}
             onClick={() => navigate(`/entrepeneurship/${companyId}/projects/${projectId}/campaigns/${campaign._id}`)}
             className="bg-[#1A1A1A] rounded-md shadow-lg px-4 py-4 cursor-pointer text-left"
             whileHover={{ y: -6, scale: 1.02 }}
@@ -32,7 +40,14 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
         >
             <div className="flex justify-between items-center">
                 <p>{campaign.name}</p>
-                <Fish size={16} />
+                <div className="flex items-center gap-2">
+                    <Fish size={16} />
+                    {onDelete && (
+                        <button title="Eliminar campaña" onClick={handleDelete}>
+                            <Trash2 size={14} className="text-[#959595] hover:text-red-400 transition-colors" />
+                        </button>
+                    )}
+                </div>
             </div>
 
             <div className="border-b border-b-[#777777] mt-2"></div>
@@ -64,6 +79,6 @@ export default function CampaignCard({ campaign }: CampaignCardProps) {
                 <Calendar size={15} />
                 <p className="text-sm text-[#959595]">{formattedDate}</p>
             </div>
-        </motion.button>
+        </motion.div>
     )
 }

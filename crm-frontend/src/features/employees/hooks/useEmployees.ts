@@ -6,7 +6,8 @@ import {
     bulkCreateEmployees as bulkCreateEmployeesService,
     updateEmployee as updateEmployeeService,
     regenerateCourseCredentials as regenerateCourseCredentialsService,
-    deleteEmployee as deleteEmployeeService
+    deleteEmployee as deleteEmployeeService,
+    assignCourseToCompany as assignCourseToCompanyService
 } from "../services/employeeService";
 
 import type { Employee, CreateEmployeeData, UpdateEmployeeData } from "../types/employee.types";
@@ -120,6 +121,22 @@ export function useEmployees(companyId: string | null) {
         setEmployees((current) => current.filter((employee) => employee._id !== employeeId));
     };
 
+    const assignCourseToCompany = async () => {
+
+        if (!companyId) {
+            throw new Error("No existe un proyecto seleccionado");
+        }
+
+        const result = await assignCourseToCompanyService(companyId);
+
+        // updateMany no devuelve los documentos actualizados, asi que se
+        // vuelve a pedir la lista completa para reflejar el enrolamiento
+        const refreshed = await getEmployees(companyId);
+        setEmployees(refreshed);
+
+        return result;
+    };
+
     return {
         employees,
         loading,
@@ -128,7 +145,8 @@ export function useEmployees(companyId: string | null) {
         bulkCreateEmployees,
         updateEmployee,
         regenerateCourseCredentials,
-        deleteEmployee
+        deleteEmployee,
+        assignCourseToCompany
     };
 
 }

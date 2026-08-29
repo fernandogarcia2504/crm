@@ -5,7 +5,8 @@ import {
     updateCampaign as updateCampaignService,
     updateTargetEvent as updateTargetEventService,
     launchCampaignInGophish as launchCampaignInGophishService,
-    syncCampaignResults as syncCampaignResultsService
+    syncCampaignResults as syncCampaignResultsService,
+    deleteCampaign as deleteCampaignService
 } from "../services/phishingCampaignService";
 
 import type { PhishingCampaign, UpdateCampaignData, TargetEvent } from "../types/phishingCampaign.types";
@@ -110,6 +111,17 @@ export function useCampaign(projectId: string | null, campaignId: string | null)
         return updatedCampaign;
     };
 
+    const deleteCampaign = async () => {
+
+        if (!projectId || !campaignId) {
+            throw new Error("No existe una campaña seleccionada");
+        }
+
+        const { gophishWarning } = await deleteCampaignService(projectId, campaignId);
+
+        return gophishWarning;
+    };
+
     return {
         campaign,
         loading,
@@ -117,7 +129,8 @@ export function useCampaign(projectId: string | null, campaignId: string | null)
         updateCampaign,
         updateTargetEvent,
         launchCampaign,
-        syncResults
+        syncResults,
+        deleteCampaign
     };
 
 }

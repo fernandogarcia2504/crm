@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
@@ -79,7 +81,8 @@ export const getMe = async (req, res) => {
                 email: employee.email,
                 company: employee.company?.name,
                 progress: employee.courseAccount.progress,
-                completed: employee.courseAccount.completed
+                completed: employee.courseAccount.completed,
+                mustChangePassword: employee.courseAccount.mustChangePassword !== false
             }
         });
 
@@ -279,6 +282,59 @@ export const submitQuiz = async (req, res) => {
         console.error(error);
 
         return res.status(500).json({ message: "Error al calificar el quiz" });
+
+    }
+
+};
+
+
+// CAMBIAR LA CONTRASEÑA DEL PORTAL (obligatorio la primera vez que se
+// usa la temporal, y disponible libremente despues desde el header)
+export const changePassword = async (req, res) => {
+
+    try {
+
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({
+                message: "Se requiere la contraseña actual y la nueva"
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                message: "La nueva contraseña debe tener al menos 8 caracteres"
+            });
+        }
+
+        const employee = await Employee.findById(req.employee.id);
+
+        if (!employee || !employee.courseAccount?.passwordHash) {
+            return res.status(404).json({ message: "Empleado no encontrado" });
+        }
+
+        const currentCorrect = await bcrypt.compare(
+            currentPassword,
+            employee.courseAccount.passwordHash
+        );
+
+        if (!currentCorrect) {
+            return res.status(401).json({ message: "La contraseña actual no es correcta" });
+        }
+
+        employee.courseAccount.passwordHash = await bcrypt.hash(newPassword, 10);
+        employee.courseAccount.mustChangePassword = false;
+
+        await employee.save();
+
+        return res.status(200).json({ message: "Contraseña actualizada correctamente" });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({ message: "Error al cambiar la contraseña" });
 
     }
 

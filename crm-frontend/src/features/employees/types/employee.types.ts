@@ -1,13 +1,22 @@
 export type EmployeeStatus = "Activo" | "Inactivo";
 
+export interface ModuleProgressEntry {
+    module: string;
+    completed: boolean;
+    completedAt: string | null;
+    quizScore: number | null;
+}
+
 export interface CourseAccount {
     username: string;
     credentialsIssuedAt: string | null;
+    course: string | null;
     enrolled: boolean;
     enrolledAt: string | null;
     completed: boolean;
     completedAt: string | null;
     progress: number;
+    moduleProgress: ModuleProgressEntry[];
 }
 
 export interface Employee {
@@ -76,4 +85,8 @@ export interface BulkCreateEmployeesResponse {
     message: string;
     created: Employee[];
     skipped: BulkCreateSkipped[];
+}
+
+export interface AssignCourseResponse {
+    message: string;
 }

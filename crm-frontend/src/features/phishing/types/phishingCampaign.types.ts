@@ -107,3 +107,8 @@ export interface CampaignResponse {
     message: string;
     campaign: PhishingCampaign;
 }
+
+export interface DeleteCampaignResponse {
+    message: string;
+    gophishWarning: string | null;
+}

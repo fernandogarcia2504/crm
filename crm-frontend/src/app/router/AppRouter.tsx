@@ -22,8 +22,10 @@ import OpportunitiesPage from "../../features/opportunities/pages/OpportunitiesP
 import CompanyContactsPage from "../../features/contacts/pages/CompanyContactsPage";
 
 import CompanyEmployeesPage from "../../features/employees/pages/CompanyEmployeesPage";
+import CompanyGradesPage from "../../features/employees/pages/CompanyGradesPage";
 import ProjectCampaignsPage from "../../features/phishing/pages/ProjectCampaignsPage";
 import CampaignPage from "../../features/phishing/pages/CampaignPage";
+import CoursePage from "../../features/courses/pages/CoursePage";
 
 import { AuthProvider } from "../context/AuthContext";
 import { BusinessProvider } from "../context/BusinessContext";
@@ -46,6 +48,7 @@ export default function AppRouter() {
                                     <Route path="/entrepeneurship/templates" element={<TemplatesPage />} />
                                     <Route path="/entrepeneurship/templates/:templateId" element={<TemplatePage />} />
                                     <Route path="/entrepeneurship/contacts" element={<ContactsPage />} />
+                                    <Route path="/entrepeneurship/course" element={<CoursePage />} />
 
                                     <Route path="/entrepeneurship/:companyId/projects" element={<ProjectsPage />} />
                                     <Route path="/entrepeneurship/:companyId/projects/:projectId" element={<ProjectPage />} />
@@ -55,6 +58,7 @@ export default function AppRouter() {
                                     <Route path="/entrepeneurship/:companyId/opportunities" element={<OpportunitiesPage />} />
 
                                     <Route path="/entrepeneurship/:companyId/employees" element={<CompanyEmployeesPage />} />
+                                    <Route path="/entrepeneurship/:companyId/grades" element={<CompanyGradesPage />} />
                                     <Route path="/entrepeneurship/:companyId/projects/:projectId/campaigns" element={<ProjectCampaignsPage />} />
                                     <Route path="/entrepeneurship/:companyId/projects/:projectId/campaigns/:campaignId" element={<CampaignPage />} />
                                     

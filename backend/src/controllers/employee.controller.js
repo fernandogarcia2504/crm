@@ -21,9 +21,21 @@ const generateTempPassword = () => {
     return password;
 };
 
+// Busca el curso activo de un negocio. Solo deberia existir uno (por eso
+// no hay selector de curso en ningun lado del CRM), pero si llegara a
+// haber mas de uno activo por error, toma el mas reciente.
+const findActiveCourse = async (businessId) => {
+
+    return Course
+        .findOne({ business: businessId, active: true })
+        .sort({ createdAt: -1 });
+
+};
+
 // Crea el username + hash de contraseña para el curso, y devuelve
-// tambien la contraseña en texto plano (solo para esta respuesta)
-const issueCourseCredentials = async (email) => {
+// tambien la contraseña en texto plano (solo para esta respuesta).
+// Si se le pasa un curso activo, enrola al empleado de una vez.
+const issueCourseCredentials = async (email, activeCourse) => {
 
     const plainPassword = generateTempPassword();
 
@@ -33,12 +45,16 @@ const issueCourseCredentials = async (email) => {
 
     return {
         courseAccount: {
-            username: email.trim().toLowerCase(),
+            username: normalizedUsername,
             passwordHash,
             credentialsIssuedAt: new Date(),
-            enrolled: false,
+            mustChangePassword: true,
+            course: activeCourse?._id ?? null,
+            enrolled: Boolean(activeCourse),
+            enrolledAt: activeCourse ? new Date() : null,
             completed: false,
-            progress: 0
+            progress: 0,
+            moduleProgress: []
         },
         plainPassword
     };
@@ -88,7 +104,10 @@ export const createEmployee = async (req, res) => {
             });
         }
 
-        const { courseAccount, plainPassword } = await issueCourseCredentials(email);
+        const { courseAccount, plainPassword } = await issueCourseCredentials(
+            email,
+            await findActiveCourse(company.business)
+        );
 
         const employee = await Employee.create({
             business: company.business,
@@ -148,6 +167,9 @@ export const bulkCreateEmployees = async (req, res) => {
                 .map((employee) => employee.email)
         );
 
+        // Se busca una sola vez fuera del loop, no por cada fila
+        const activeCourse = await findActiveCourse(company.business);
+
         const created = [];
         const skipped = [];
 
@@ -165,7 +187,7 @@ export const bulkCreateEmployees = async (req, res) => {
                 continue;
             }
 
-            const { courseAccount, plainPassword } = await issueCourseCredentials(email);
+            const { courseAccount, plainPassword } = await issueCourseCredentials(email, activeCourse);
 
             const employee = await Employee.create({
                 business: company.business,
@@ -367,10 +389,13 @@ export const regenerateCourseCredentials = async (req, res) => {
 
         const { courseAccount, plainPassword } = await issueCourseCredentials(employee.email);
 
-        // Conserva enrolled/completed/progress, solo rota la contraseña
+        // Conserva enrolled/completed/progress, solo rota la contraseña.
+        // Al ser una contraseña temporal nueva, se vuelve a pedir el
+        // cambio en el próximo login.
         employee.courseAccount.username = courseAccount.username;
         employee.courseAccount.passwordHash = courseAccount.passwordHash;
         employee.courseAccount.credentialsIssuedAt = courseAccount.credentialsIssuedAt;
+        employee.courseAccount.mustChangePassword = true;
 
         await employee.save();
 
@@ -393,8 +418,11 @@ export const regenerateCourseCredentials = async (req, res) => {
 };
 
 
-// ASIGNAR UN CURSO A TODOS LOS EMPLEADOS DE UNA EMPRESA (ej. al arrancar
-// la campaña de concientizacion con un cliente nuevo)
+// ASIGNAR/RE-SINCRONIZAR EL CURSO A TODOS LOS EMPLEADOS DE UNA EMPRESA
+// Sirve para: 1) empleados que ya existian antes de crear el curso, o
+// 2) forzar que todos vuelvan a ver el curso desde cero si se reemplazo
+// su contenido. Nuevos empleados ya se enrolan solos al crearse
+// (ver issueCourseCredentials), asi que esto es el respaldo manual.
 export const assignCourseToCompany = async (req, res) => {
 
     try {
@@ -402,25 +430,42 @@ export const assignCourseToCompany = async (req, res) => {
         const { companyId } = req.params;
         const { courseId } = req.body;
 
-        if (!courseId) {
-            return res.status(400).json({ message: "El courseId es requerido" });
+        const company = await Company.findById(companyId);
+
+        if (!company) {
+            return res.status(404).json({ message: "La empresa no existe" });
         }
 
-        const course = await Course.findById(courseId);
+        // Si no se manda courseId, se usa el curso activo del negocio
+        // (es lo normal, ya que solo hay uno)
+        const course = courseId
+            ? await Course.findById(courseId)
+            : await findActiveCourse(company.business);
 
         if (!course) {
-            return res.status(404).json({ message: "El curso no existe" });
+            return res.status(404).json({
+                message: courseId
+                    ? "El curso no existe"
+                    : "Este negocio todavia no tiene un curso activo"
+            });
+        }
+
+        if (String(course.business) !== String(company.business)) {
+            return res.status(400).json({
+                message: "Este curso pertenece a otro negocio"
+            });
         }
 
         const result = await Employee.updateMany(
             { company: companyId },
             {
                 $set: {
-                    "courseAccount.course": courseId,
+                    "courseAccount.course": course._id,
                     "courseAccount.enrolled": true,
                     "courseAccount.enrolledAt": new Date(),
                     "courseAccount.progress": 0,
                     "courseAccount.completed": false,
+                    "courseAccount.completedAt": null,
                     "courseAccount.moduleProgress": []
                 }
             }

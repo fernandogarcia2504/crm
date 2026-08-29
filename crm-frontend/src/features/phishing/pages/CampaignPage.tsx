@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { motion } from "framer-motion";
-import { ChevronLeft, Check, Rocket, RefreshCw } from "lucide-react";
+import { ChevronLeft, Check, Rocket, RefreshCw, Trash2 } from "lucide-react";
 
 import { BusinessContext } from "../../../app/context/BusinessContext";
 
@@ -33,7 +33,7 @@ export default function CampaignPage() {
 
     const businessContext = useContext(BusinessContext);
 
-    const { campaign, loading, error, updateCampaign, updateTargetEvent, launchCampaign, syncResults } = useCampaign(
+    const { campaign, loading, error, updateCampaign, updateTargetEvent, launchCampaign, syncResults, deleteCampaign } = useCampaign(
         projectId ?? null,
         campaignId ?? null
     );
@@ -42,6 +42,11 @@ export default function CampaignPage() {
     const [launchError, setLaunchError] = useState<string | null>(null);
     const [syncing, setSyncing] = useState(false);
     const [syncError, setSyncError] = useState<string | null>(null);
+    const [deleting, setDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState<string | null>(null);
+    const [campaignUrlInput, setCampaignUrlInput] = useState("");
+    const [savingUrl, setSavingUrl] = useState(false);
+    const [urlSaveError, setUrlSaveError] = useState<string | null>(null);
 
     useEffect(() => {
 
@@ -51,8 +56,26 @@ export default function CampaignPage() {
 
     }, [businessContext, companyId, projectId, navigate]);
 
+    useEffect(() => {
+        setCampaignUrlInput(campaign?.campaignUrl ?? "");
+    }, [campaign?.campaignUrl]);
+
     const handleStatusChange = (status: CampaignStatus) => {
         updateCampaign({ status }).catch((error) => console.error(error));
+    };
+
+    const handleSaveUrl = async () => {
+
+        try {
+            setSavingUrl(true);
+            setUrlSaveError(null);
+            await updateCampaign({ campaignUrl: campaignUrlInput });
+        } catch (error) {
+            console.error(error);
+            setUrlSaveError(error instanceof Error ? error.message : "Error al guardar la URL");
+        } finally {
+            setSavingUrl(false);
+        }
     };
 
     const handleToggle = (targetId: string, event: TargetEvent, currentValue: boolean) => {
@@ -91,6 +114,34 @@ export default function CampaignPage() {
         }
     };
 
+    const handleDelete = async () => {
+
+        if (!window.confirm("¿Eliminar esta campaña? Se borrará también en Gophish y esta acción no se puede deshacer.")) {
+            return;
+        }
+
+        try {
+
+            setDeleting(true);
+            setDeleteError(null);
+
+            const gophishWarning = await deleteCampaign();
+
+            if (gophishWarning && !window.confirm(`${gophishWarning}\n\n¿Salir de todas formas?`)) {
+                setDeleting(false);
+                return;
+            }
+
+            navigate(`/entrepeneurship/${companyId}/projects/${projectId}/campaigns`);
+
+        } catch (error) {
+            console.error(error);
+            setDeleteError(error instanceof Error ? error.message : "Error al eliminar la campaña");
+            setDeleting(false);
+        }
+
+    };
+
     return (
         <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }} className="w-full flex flex-col mb-16">
 
@@ -112,15 +163,53 @@ export default function CampaignPage() {
                     <div className="w-full flex justify-between items-center mt-8">
                         <p>{campaign.name}</p>
 
-                        <select
-                            value={campaign.status}
-                            onChange={(e) => handleStatusChange(e.target.value as CampaignStatus)}
-                            className="bg-[#212121] rounded-md px-3 py-1 text-sm"
-                        >
-                            {STATUS_OPTIONS.map((status) => (
-                                <option key={status} value={status}>{status}</option>
-                            ))}
-                        </select>
+                        <div className="flex items-center gap-3">
+                            <select
+                                value={campaign.status}
+                                onChange={(e) => handleStatusChange(e.target.value as CampaignStatus)}
+                                className="bg-[#212121] rounded-md px-3 py-1 text-sm"
+                            >
+                                {STATUS_OPTIONS.map((status) => (
+                                    <option key={status} value={status}>{status}</option>
+                                ))}
+                            </select>
+
+                            <button title="Eliminar campaña" onClick={handleDelete} disabled={deleting}>
+                                <Trash2 size={16} className="text-[#959595] hover:text-red-400 transition-colors" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {deleteError && <p className="text-sm text-red-400 mt-2">{deleteError}</p>}
+
+                    <div className="w-full flex flex-col gap-2 mt-4">
+                        <p className="text-xs text-[#959595]">URL pública de la landing page</p>
+
+                        {campaign.gophishCampaignId ? (
+                            <p className="text-sm text-[#5c5c5c]">
+                                {campaign.campaignUrl || "(vacía — así se lanzó esta campaña, por eso los links del correo salen rotos)"}
+                                <span className="block text-xs mt-1">Ya lanzada en Gophish: este campo ya no se puede cambiar aquí. Borra y vuelve a crear la campaña si necesitas corregirlo.</span>
+                            </p>
+                        ) : (
+                            <div className="w-full flex items-center gap-3">
+                                <input
+                                    type="text"
+                                    value={campaignUrlInput}
+                                    onChange={(e) => setCampaignUrlInput(e.target.value)}
+                                    placeholder="https://track.tudominio.com"
+                                    className="flex-1 rounded-md px-3 py-1 bg-[#212121] text-sm"
+                                />
+                                <button
+                                    onClick={handleSaveUrl}
+                                    disabled={savingUrl || campaignUrlInput === (campaign.campaignUrl ?? "")}
+                                    className="text-sm bg-[#2F76D2] rounded-md px-3 py-1 disabled:opacity-50"
+                                >
+                                    {savingUrl ? "Guardando..." : "Guardar"}
+                                </button>
+                            </div>
+                        )}
+
+                        {urlSaveError && <p className="text-xs text-red-400">{urlSaveError}</p>}
                     </div>
 
                     <GophishServerBar />
@@ -130,8 +219,9 @@ export default function CampaignPage() {
                             <button
                                 type="button"
                                 onClick={handleLaunch}
-                                disabled={launching}
-                                className="flex items-center gap-2 bg-[#2F76D2] rounded-md px-4 py-2 text-sm"
+                                disabled={launching || !campaign.campaignUrl}
+                                title={!campaign.campaignUrl ? "Falta la URL pública de la landing page" : undefined}
+                                className="flex items-center gap-2 bg-[#2F76D2] rounded-md px-4 py-2 text-sm disabled:opacity-50"
                             >
                                 <Rocket size={14} />
                                 <p>{launching ? "Lanzando..." : "Lanzar en Gophish"}</p>

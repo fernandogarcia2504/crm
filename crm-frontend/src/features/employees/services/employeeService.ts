@@ -4,7 +4,8 @@ import type {
     UpdateEmployeeData,
     GetEmployeesResponse,
     CreateEmployeeResponse,
-    BulkCreateEmployeesResponse
+    BulkCreateEmployeesResponse,
+    AssignCourseResponse
 } from "../types/employee.types";
 
 const API_URL = "http://localhost:3000/api/employees";
@@ -148,4 +149,31 @@ export const deleteEmployee = async (
         const data = await response.json();
         throw new Error(data.message || "Error al eliminar el empleado");
     }
+};
+
+// Re-sincroniza el curso activo del negocio a todos los empleados de la
+// empresa. Sirve como respaldo manual para nomina que ya existia antes
+// de crear el curso (los empleados nuevos ya se enrolan solos).
+export const assignCourseToCompany = async (
+    companyId: string
+): Promise<AssignCourseResponse> => {
+
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`${API_URL}/${companyId}/assign-course`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({})
+    });
+
+    const data: AssignCourseResponse = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || "Error al asignar el curso");
+    }
+
+    return data;
 };

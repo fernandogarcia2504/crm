@@ -34,7 +34,10 @@ export default function ProjectNavbar() {
 
 
                     {businessContext?.isSecurityAwarenessBusiness && (
-                        <NavLink to={`/entrepeneurship/${companyId}/employees`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Empleados</NavLink>
+                        <>
+                            <NavLink to={`/entrepeneurship/${companyId}/employees`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Empleados</NavLink>
+                            <NavLink to={`/entrepeneurship/${companyId}/grades`} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Calificaciones</NavLink>
+                        </>
                     )}
 
                 </div>

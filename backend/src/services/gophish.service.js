@@ -182,3 +182,22 @@ export const getCampaignResults = async (baseUrl, gophishCampaignId) => {
     }
 
 };
+
+// Elimina la campaña directamente en Gophish. Si Gophish ya no la tiene
+// (404, borrada a mano desde el panel) se trata como éxito: el objetivo
+// ya se cumplió, no queda nada huérfano allá.
+export const deleteCampaign = async (baseUrl, gophishCampaignId) => {
+
+    try {
+        const client = buildClient(baseUrl);
+        await client.delete(`/campaigns/${gophishCampaignId}`);
+    } catch (error) {
+
+        if (error.response?.status === 404) {
+            return;
+        }
+
+        throw unwrapError(error);
+    }
+
+};

@@ -3,7 +3,12 @@ import Employee from "../models/employee.model.js";
 import Project from "../models/project.model.js";
 import Business from "../models/business.model.js";
 
-import { upsertGroup, launchCampaign as launchGophishCampaign, getCampaignResults } from "../services/gophish.service.js";
+import {
+    upsertGroup,
+    launchCampaign as launchGophishCampaign,
+    getCampaignResults,
+    deleteCampaign as deleteGophishCampaign
+} from "../services/gophish.service.js";
 
 const TARGET_EVENTS = ["sent", "opened", "clicked", "submittedData", "reported"];
 const EVENT_TIMESTAMP_FIELD = {
@@ -57,6 +62,7 @@ export const createCampaign = async (req, res) => {
             landingPage,
             sendingProfile,
             senderDomain,
+            campaignUrl,
             launchDate,
             gophishCampaignId,
             notes,
@@ -103,6 +109,7 @@ export const createCampaign = async (req, res) => {
             landingPage,
             sendingProfile,
             senderDomain,
+            campaignUrl,
             launchDate,
             gophishCampaignId,
             notes,
@@ -210,6 +217,7 @@ export const updateCampaign = async (req, res) => {
             landingPage,
             sendingProfile,
             senderDomain,
+            campaignUrl,
             launchDate,
             status,
             gophishCampaignId,
@@ -232,6 +240,7 @@ export const updateCampaign = async (req, res) => {
         if (landingPage !== undefined) campaign.landingPage = landingPage;
         if (sendingProfile !== undefined) campaign.sendingProfile = sendingProfile;
         if (senderDomain !== undefined) campaign.senderDomain = senderDomain;
+        if (campaignUrl !== undefined) campaign.campaignUrl = campaignUrl;
         if (launchDate !== undefined) campaign.launchDate = launchDate;
         if (status !== undefined) campaign.status = status;
         if (gophishCampaignId !== undefined) campaign.gophishCampaignId = gophishCampaignId;
@@ -362,6 +371,12 @@ export const launchCampaignInGophish = async (req, res) => {
         if (!campaign.emailTemplate || !campaign.landingPage || !campaign.sendingProfile) {
             return res.status(400).json({
                 message: "Faltan por definir la plantilla de correo, la landing page o el sending profile de la campaña"
+            });
+        }
+
+        if (!campaign.campaignUrl) {
+            return res.status(400).json({
+                message: "Falta la URL pública de la landing page. Gophish generaría los links del correo con este campo vacío."
             });
         }
 
@@ -545,7 +560,7 @@ export const syncCampaignResults = async (req, res) => {
 };
 
 
-// ELIMINAR UNA CAMPAÑA
+// ELIMINAR UNA CAMPAÑA (en Gophish y en el CRM con una sola acción)
 export const deleteCampaign = async (req, res) => {
 
     try {
@@ -563,10 +578,42 @@ export const deleteCampaign = async (req, res) => {
             });
         }
 
+        let gophishWarning = null;
+
+        // Si la campaña nunca se lanzó en Gophish no hay nada que borrar
+        // allá. Si sí se lanzó, se intenta borrar primero en Gophish; si
+        // eso falla (servidor apagado, ya no existe, etc.) no se bloquea
+        // el borrado del registro en el CRM, pero se avisa al usuario
+        // para que revise el panel de Gophish manualmente.
+        if (campaign.gophishCampaignId) {
+
+            try {
+
+                const business = await Business.findById(campaign.business);
+
+                if (!business || !business.gophishUrl) {
+                    gophishWarning = "Este negocio no tiene configurada la URL de Gophish; la campaña solo se eliminó del CRM.";
+                } else {
+                    await deleteGophishCampaign(business.gophishUrl, campaign.gophishCampaignId);
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                gophishWarning = `La campaña se eliminó del CRM, pero no se pudo eliminar en Gophish: ${error.message}`;
+
+            }
+
+        }
+
         await PhishingCampaign.findByIdAndDelete(campaignId);
 
         return res.status(200).json({
-            message: "Campaña eliminada correctamente"
+            message: gophishWarning
+                ? "Campaña eliminada del CRM"
+                : "Campaña eliminada correctamente en Gophish y en el CRM",
+            gophishWarning
         });
 
     } catch (error) {

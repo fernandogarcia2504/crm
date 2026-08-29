@@ -28,6 +28,10 @@ export default function CompanyNavbar() {
                     <NavLink to={"/entrepeneurship/templates"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Templates</NavLink>
                     <NavLink to={"/entrepeneurship/contacts"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Contactos</NavLink>
 
+                    {businessContext?.isSecurityAwarenessBusiness && (
+                        <NavLink to={"/entrepeneurship/course"} className={({ isActive }) => isActive ? "text-[#2F76D2]" : "text-[#ECECEC]"}>Curso</NavLink>
+                    )}
+
                 </div>
 
                 <div className="flex-1" />

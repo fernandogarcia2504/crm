@@ -69,9 +69,11 @@ export function useCampaigns(projectId: string | null) {
             throw new Error("No existe un proyecto seleccionado");
         }
 
-        await deleteCampaignService(projectId, campaignId);
+        const { gophishWarning } = await deleteCampaignService(projectId, campaignId);
 
         setCampaigns((current) => current.filter((campaign) => campaign._id !== campaignId));
+
+        return gophishWarning;
     };
 
     return {
